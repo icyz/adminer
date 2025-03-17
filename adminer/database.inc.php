@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $row = $_POST;
 
 if ($_POST && !$error && !isset($_POST["add_x"])) { // add is an image and PHP changes add.x to add_x
@@ -44,7 +46,7 @@ if ($_POST) {
 	$name = $row["name"];
 } elseif (DB != "") {
 	$row["collation"] = db_collation(DB, $collations);
-} elseif ($jush == "sql") {
+} elseif (JUSH == "sql") {
 	// propose database name with limited privileges
 	foreach (get_vals("SHOW GRANTS") as $grant) {
 		if (preg_match('~ ON (`(([^\\\\`]|``|\\\\.)*)%`\.\*)?~', $grant, $match) && $match[1]) {
@@ -59,14 +61,13 @@ if ($_POST) {
 <p>
 <?php
 echo ($_POST["add_x"] || strpos($name, "\n")
-	? '<textarea id="name" name="name" rows="10" cols="40">' . h($name) . '</textarea><br>'
-	: '<input name="name" id="name" value="' . h($name) . '" data-maxlength="64" autocapitalize="off">'
+	? '<textarea autofocus name="name" rows="10" cols="40">' . h($name) . '</textarea><br>'
+	: '<input name="name" autofocus value="' . h($name) . '" data-maxlength="64" autocapitalize="off">'
 ) . "\n" . ($collations ? html_select("collation", array("" => "(" . lang('collation') . ")") + $collations, $row["collation"]) . doc_link(array(
 	'sql' => "charset-charsets.html",
 	'mariadb' => "supported-character-sets-and-collations/",
-	'mssql' => "ms187963.aspx",
+	'mssql' => "relational-databases/system-functions/sys-fn-helpcollations-transact-sql",
 )) : "");
-echo script("focus(qs('#name'));");
 ?>
 <input type="submit" value="<?php echo lang('Save'); ?>">
 <?php

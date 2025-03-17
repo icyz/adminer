@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'Belépés',
 	'Logout successful.' => 'Sikeres kilépés.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'Adatbázis létrehozása',
 	'SQL command' => 'SQL parancs',
 	'Logout' => 'Kilépés',
-	'database' => 'adatbázis',
 	'Use' => 'Használ',
 	'No tables.' => 'Nincs tábla.',
 	'select' => 'kiválasztás',
@@ -96,7 +97,7 @@ $translations = array(
 	'ON DELETE' => 'törléskor',
 	'ON UPDATE' => 'frissítéskor',
 	'Index Type' => 'Index típusa',
-	'Column (length)' => 'Oszop (méret)',
+	'length' => 'méret',
 	'View has been dropped.' => 'A nézet eldobva.',
 	'View has been altered.' => 'A nézet módosult.',
 	'View has been created.' => 'A nézet létrejött.',

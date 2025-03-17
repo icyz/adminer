@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'System' => 'System',
 	'Server' => 'Server',
@@ -64,7 +66,6 @@ $translations = array(
 	'Format' => 'Format',
 	'Data' => 'Data',
 	'Database' => 'Database',
-	'database' => 'database',
 	'Use' => 'Bruk',
 	'Select database' => 'Velg database',
 	'Invalid database.' => 'Ugyldig database.',
@@ -165,7 +166,7 @@ $translations = array(
 	'Alter indexes' => 'Endre indekser',
 	'Add next' => 'Legg til neste',
 	'Index Type' => 'Indekstype',
-	'Column (length)' => 'Kolonne (lengde)',
+	'length' => 'lengde',
 	'Foreign keys' => 'Fremmednøkler',
 	'Foreign key' => 'Fremmednøkkel',
 	'Foreign key has been dropped.' => 'Fremmednøkkelen er slettet.',

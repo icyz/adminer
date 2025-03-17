@@ -7,11 +7,10 @@
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
 class AdminerLoginServers {
-	/** @access protected */
-	var $servers;
-	
+	protected $servers;
+
 	/** Set supported servers
-	* @param array array($description => array("server" => , "driver" => "server|pgsql|sqlite|..."))
+	* @param array [$description => ["server" => , "driver" => "server|pgsql|sqlite|..."]]
 	*/
 	function __construct($servers) {
 		$this->servers = $servers;
@@ -20,23 +19,22 @@ class AdminerLoginServers {
 			$_POST["auth"]["driver"] = $this->servers[$key]["driver"];
 		}
 	}
-	
+
 	function credentials() {
-		return array($this->servers[SERVER]["server"], $_GET["username"], get_password());
+		return array($this->servers[Adminer\SERVER]["server"], $_GET["username"], Adminer\get_password());
 	}
-	
+
 	function login($login, $password) {
-		if (!$this->servers[SERVER]) {
+		if (!$this->servers[Adminer\SERVER]) {
 			return false;
 		}
 	}
-	
+
 	function loginFormField($name, $heading, $value) {
 		if ($name == 'driver') {
 			return '';
 		} elseif ($name == 'server') {
-			return $heading . "<select name='auth[server]'>" . optionlist(array_keys($this->servers), SERVER) . "</select>\n";
+			return $heading . Adminer\html_select("auth[server]", array_keys($this->servers), Adminer\SERVER) . "\n";
 		}
 	}
-	
 }

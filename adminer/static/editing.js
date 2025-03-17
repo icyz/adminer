@@ -16,17 +16,22 @@ function bodyLoad(version, maria) {
 					if (maria) {
 						for (var i = 1; i < obj.length; i++) {
 							obj[i] = obj[i]
-								.replace(/\.html/, '/')
-								.replace(/-type-syntax/, '-data-types')
+								.replace('.html', '/')
+								.replace('-type-syntax', '-data-types')
 								.replace(/numeric-(data-types)/, '$1-$&')
-								.replace(/#statvar_.*/, '#$$1')
+								.replace(/replication-options-(master|binary-log)\//, 'replication-and-binary-log-system-variables/')
+								.replace('server-options/', 'server-system-variables/')
+								.replace('innodb-parameters/', 'innodb-system-variables/')
+								.replace(/#(statvar|sysvar|option_mysqld)_(.*)/, '#$2')
+								.replace(/#sysvar_(.*)/, '#$1')
 							;
 						}
 					}
 				}
-				obj[key] = (maria ? obj[key].replace(/dev\.mysql\.com\/doc\/mysql\/en\//, 'mariadb.com/kb/en/library/') : obj[key]) // MariaDB
-					.replace(/\/doc\/mysql/, '/doc/refman/' + version) // MySQL
-					.replace(/\/docs\/current/, '/docs/' + version) // PostgreSQL
+
+				obj[key] = (maria ? obj[key].replace('dev.mysql.com/doc/mysql', 'mariadb.com/kb') : obj[key]) // MariaDB
+					.replace('/doc/mysql', '/doc/refman/' + version) // MySQL
+					.replace('/docs/current', '/docs/' + version) // PostgreSQL
 				;
 			}
 		}
@@ -83,14 +88,14 @@ function messagesPrint(el) {
 
 
 
-/** Hide or show some login rows for selected driver	
-* @param HTMLSelectElement	
-*/	
-function loginDriver(driver) {	
-	var trs = parentTag(driver, 'table').rows;	
-	var disabled = /sqlite/.test(selectValue(driver));	
+/** Hide or show some login rows for selected driver
+* @param HTMLSelectElement
+*/
+function loginDriver(driver) {
+	var trs = parentTag(driver, 'table').rows;
+	var disabled = /sqlite/.test(selectValue(driver));
 	alterClass(trs[1], 'hidden', disabled);	// 1 - row with server
-	trs[1].getElementsByTagName('input')[0].disabled = disabled;	
+	trs[1].getElementsByTagName('input')[0].disabled = disabled;
 }
 
 
@@ -103,6 +108,13 @@ var dbPrevious = {};
 * @this HTMLSelectElement
 */
 function dbMouseDown(event) {
+	// Firefox: mouse-down event does not contain pressed key information for OPTION.
+	// Chrome: mouse-down event has inherited key information from SELECT.
+	// So we ignore the event for OPTION to work Ctrl+click correctly everywhere.
+	if (event.target.tagName == "OPTION") {
+		return;
+	}
+
 	dbCtrl = isCtrl(event);
 	if (dbPrevious[this.name] == undefined) {
 		dbPrevious[this.name] = this.value;
@@ -145,7 +157,7 @@ function selectFieldChange() {
 		for (var i=0; i < selects.length; i++) {
 			var select = selects[i];
 			var col = selectValue(select);
-			var match = /^(where.+)col\]/.exec(select.name);
+			var match = /^(where.+)col]/.exec(select.name);
 			if (match) {
 				var op = selectValue(form[match[1] + 'op]']);
 				var val = form[match[1] + 'val]'].value;
@@ -155,7 +167,7 @@ function selectFieldChange() {
 					ok = false;
 				}
 			}
-			if ((match = /^(columns.+)fun\]/.exec(select.name))) {
+			if ((match = /^(columns.+)fun]/.exec(select.name))) {
 				if (/^(avg|count|count distinct|group_concat|max|min|sum)$/.test(col)) {
 					group = true;
 				}
@@ -226,9 +238,13 @@ function editFields() {
 	els = qsa('[name$="[type]"]');
 	for (var i = 0; i < els.length; i++) {
 		mixin(els[i], {
-			onfocus: function () { lastType = selectValue(this); },
+			onfocus: function () {
+				lastType = selectValue(this);
+			},
 			onchange: editingTypeChange,
-			onmouseover: function (event) { helpMouseover.call(this, event, getTarget(event).value, 1) },
+			onmouseover: function (event) {
+				helpMouseover.call(this, event, getTarget(event).value, 1);
+			},
 			onmouseout: helpMouseout
 		});
 	}
@@ -273,8 +289,9 @@ function editingClick(event) {
 */
 function editingInput(event) {
 	var el = getTarget(event);
-	if (/\[default\]$/.test(el.name)) {
-		 el.previousSibling.checked = true;
+	if (/\[default]$/.test(el.name)) {
+		 el.previousElementSibling.checked = true;
+		 el.previousElementSibling.selectedIndex = Math.max(el.previousElementSibling.selectedIndex, 1);
 	}
 }
 
@@ -343,8 +360,9 @@ function editingAddRow(focus) {
 		if (/\[(orig|field|comment|default)/.test(tags[i].name)) {
 			tags2[i].value = '';
 		}
-		if (/\[(has_default)/.test(tags[i].name)) {
+		if (/\[(generated)/.test(tags[i].name)) {
 			tags2[i].checked = false;
+			tags2[i].selectedIndex = 0;
 		}
 	}
 	tags[0].oninput = editingNameChange;
@@ -406,8 +424,9 @@ function editingTypeChange() {
 			}
 			el.oninput.apply(el);
 		}
-		if (lastType == 'timestamp' && el.name == name + '[has_default]' && /timestamp/i.test(formField(type.form, name + '[default]').value)) {
+		if (lastType == 'timestamp' && el.name == name + '[generated]' && /timestamp/i.test(formField(type.form, name + '[default]').value)) {
 			el.checked = false;
+			el.selectedIndex = 0;
 		}
 		if (el.name == name + '[collation]') {
 			alterClass(el, 'hidden', !/(char|text|enum|set)$/.test(text));
@@ -488,6 +507,16 @@ function columnShow(checked, column) {
 	}
 }
 
+/** Show or hide index column options
+* @param boolean
+*/
+function indexOptionsShow(checked) {
+	var options = qsa('.idxopts');
+	for (var i=0; i < options.length; i++) {
+		alterClass(options[i], 'hidden', !checked);
+	}
+}
+
 /** Display partition options
 * @this HTMLSelectElement
 */
@@ -531,7 +560,7 @@ function dumpClick(event) {
 	var el = parentTag(getTarget(event), 'label');
 	if (el) {
 		el = qs('input', el);
-		var match = /(.+)\[\]$/.exec(el.name);
+		var match = /(.+)\[]$/.exec(el.name);
 		if (match) {
 			checkboxClick.call(el, event);
 			formUncheck('check-' + match[1]);
@@ -549,7 +578,7 @@ function foreignAddRow() {
 	this.onchange = function () { };
 	var selects = qsa('select', row);
 	for (var i=0; i < selects.length; i++) {
-		selects[i].name = selects[i].name.replace(/\]/, '1$&');
+		selects[i].name = selects[i].name.replace(/\d+]/, '1$&');
 		selects[i].selectedIndex = 0;
 	}
 	parentTag(this, 'table').appendChild(row);
@@ -585,7 +614,7 @@ function indexesChangeColumn(prefix) {
 	for (var tag in { 'select': 1, 'input': 1 }) {
 		var columns = qsa(tag, parentTag(this, 'td'));
 		for (var i=0; i < columns.length; i++) {
-			if (/\[columns\]/.test(columns[i].name)) {
+			if (/\[columns]/.test(columns[i].name)) {
 				var value = selectValue(columns[i]);
 				if (value) {
 					names.push(value);
@@ -593,7 +622,7 @@ function indexesChangeColumn(prefix) {
 			}
 		}
 	}
-	this.form[this.name.replace(/\].*/, '][name]')].value = prefix + names.join('_');
+	this.form[this.name.replace(/].*/, '][name]')].value = prefix + names.join('_');
 }
 
 /** Add column for index
@@ -602,7 +631,7 @@ function indexesChangeColumn(prefix) {
 */
 function indexesAddColumn(prefix) {
 	var field = this;
-	var select = field.form[field.name.replace(/\].*/, '][type]')];
+	var select = field.form[field.name.replace(/].*/, '][type]')];
 	if (!select.selectedIndex) {
 		while (selectValue(select) != "INDEX" && select.selectedIndex < select.options.length) {
 			select.selectedIndex++;
@@ -613,14 +642,14 @@ function indexesAddColumn(prefix) {
 	var selects = qsa('select', column);
 	for (var i = 0; i < selects.length; i++) {
 		select = selects[i];
-		select.name = select.name.replace(/\]\[\d+/, '$&1');
+		select.name = select.name.replace(/]\[\d+/, '$&1');
 		select.selectedIndex = 0;
 	}
 	field.onchange = partial(indexesChangeColumn, prefix);
 	var inputs = qsa('input', column);
 	for (var i = 0; i < inputs.length; i++) {
 		var input = inputs[i];
-		input.name = input.name.replace(/\]\[\d+/, '$&1');
+		input.name = input.name.replace(/]\[\d+/, '$&1');
 		if (input.type != 'checkbox') {
 			input.value = '';
 		}
@@ -670,7 +699,7 @@ var that, x, y; // em and tablePos defined in schema.inc.php
 * @this HTMLElement
 */
 function schemaMousedown(event) {
-	if ((event.which ? event.which : event.button) == 1) {
+	if ((event.which || event.button) == 1) {
 		that = this;
 		x = event.clientX - this.offsetLeft;
 		y = event.clientY - this.offsetTop;
@@ -689,7 +718,7 @@ function schemaMousemove(event) {
 		for (var i=0; i < divs.length; i++) {
 			if (divs[i].className == 'references') {
 				var div2 = qs('[id="' + (/^refs/.test(divs[i].id) ? 'refd' : 'refs') + divs[i].id.substr(4) + '"]');
-				var ref = (tablePos[divs[i].title] ? tablePos[divs[i].title] : [ div2.parentNode.offsetTop / em, 0 ]);
+				var ref = (tablePos[divs[i].title] || [ div2.parentNode.offsetTop / em, 0 ]);
 				var left1 = -1;
 				var id = divs[i].id.replace(/^ref.(.+)-.+/, '$1');
 				if (divs[i].parentNode != div2.parentNode) {

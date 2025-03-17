@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $row = $_POST;
 
 if ($_POST && !$error) {
@@ -26,8 +28,7 @@ if (!$row) {
 ?>
 
 <form action="" method="post">
-<p><input name="name" id="name" value="<?php echo h($row["name"]); ?>" autocapitalize="off">
-<?php echo script("focus(qs('#name'));"); ?>
+<p><input name="name" autofocus value="<?php echo h($row["name"]); ?>" autocapitalize="off">
 <input type="submit" value="<?php echo lang('Save'); ?>">
 <?php
 if ($_GET["ns"] != "") {

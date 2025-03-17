@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'Inicia la sessió',
 	'Logout successful.' => 'Desconnexió correcta.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'Crea una base de dades',
 	'SQL command' => 'Ordre SQL',
 	'Logout' => 'Desconnecta',
-	'database' => 'base de dades',
 	'Use' => 'Utilitza',
 	'No tables.' => 'No hi ha cap taula.',
 	'select' => 'registres',
@@ -96,7 +97,7 @@ $translations = array(
 	'ON DELETE' => 'ON DELETE',
 	'ON UPDATE' => 'ON UPDATE',
 	'Index Type' => 'Tipus d\'índex',
-	'Column (length)' => 'Columna (longitud)',
+	'length' => 'longitud',
 	'View has been dropped.' => 'S\'ha suprimit la vista.',
 	'View has been altered.' => 'S\'ha modificat la vista.',
 	'View has been created.' => 'S\'ha creat la vista.',

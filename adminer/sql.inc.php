@@ -1,8 +1,12 @@
 <?php
+namespace Adminer;
+
 if (!$error && $_POST["export"]) {
+	save_settings(array("output" => $_POST["output"], "format" => $_POST["format"]), "adminer_import");
 	dump_headers("sql");
 	$adminer->dumpTable("", "");
 	$adminer->dumpData("", "table", $_POST["query"]);
+	$adminer->dumpFooter();
 	exit;
 }
 
@@ -28,12 +32,12 @@ if (!$error && $_POST) {
 		), "rb");
 		$query = ($fp ? fread($fp, 1e6) : false);
 	} else {
-		$query = get_file("sql_file", true);
+		$query = get_file("sql_file", true, ";");
 	}
 
 	if (is_string($query)) { // get_file() returns error as number, fread() as false
-		if (function_exists('memory_get_usage')) {
-			@ini_set("memory_limit", max(ini_bytes("memory_limit"), 2 * strlen($query) + memory_get_usage() + 8e6)); // @ - may be disabled, 2 - substr and trim, 8e6 - other variables
+		if (function_exists('memory_get_usage') && ($memory_limit = ini_bytes("memory_limit")) != "-1") {
+			@ini_set("memory_limit", max($memory_limit, 2 * strlen($query) + memory_get_usage() + 8e6)); // @ - may be disabled, 2 - substr and trim, 8e6 - other variables
 		}
 
 		if ($query != "" && strlen($query) < 1e6) { // don't add big queries
@@ -50,7 +54,7 @@ if (!$error && $_POST) {
 		$delimiter = ";";
 		$offset = 0;
 		$empty = true;
-		$connection2 = connect(); // connection for exploring indexes and EXPLAIN (to not replace FOUND_ROWS()) //! PDO - silent error
+		$connection2 = connect($adminer->credentials()); // connection for exploring indexes and EXPLAIN (to not replace FOUND_ROWS()) //! PDO - silent error
 		if (is_object($connection2) && DB != "") {
 			$connection2->select_db(DB);
 			if ($_GET["ns"] != "") {
@@ -59,9 +63,9 @@ if (!$error && $_POST) {
 		}
 		$commands = 0;
 		$errors = array();
-		$parse = '[\'"' . ($jush == "sql" ? '`#' : ($jush == "sqlite" ? '`[' : ($jush == "mssql" ? '[' : ''))) . ']|/\*|-- |$' . ($jush == "pgsql" ? '|\$[^$]*\$' : '');
+		$parse = '[\'"' . (JUSH == "sql" ? '`#' : (JUSH == "sqlite" ? '`[' : (JUSH == "mssql" ? '[' : ''))) . ']|/\*|-- |$' . (JUSH == "pgsql" ? '|\$[^$]*\$' : '');
 		$total_start = microtime(true);
-		parse_str($_COOKIE["adminer_export"], $adminer_export);
+		$adminer_export = get_settings("adminer_import"); // this doesn't offer SQL export so we match the import/export style at select
 		$dump_format = $adminer->dumpFormat();
 		unset($dump_format["sql"]);
 
@@ -81,13 +85,21 @@ if (!$error && $_POST) {
 					$offset = $pos + strlen($found);
 
 					if ($found && rtrim($found) != $delimiter) { // find matching quote or comment end
-						while (preg_match('(' . ($found == '/*' ? '\*/' : ($found == '[' ? ']' : (preg_match('~^-- |^#~', $found) ? "\n" : preg_quote($found) . "|\\\\."))) . '|$)s', $query, $match, PREG_OFFSET_CAPTURE, $offset)) { //! respect sql_mode NO_BACKSLASH_ESCAPES
+						$c_style_escapes = $driver->hasCStyleEscapes() || (JUSH == "pgsql" && ($pos > 0 && strtolower($query[$pos - 1]) == "e"));
+
+						$pattern = ($found == '/*' ? '\*/'
+							: ($found == '[' ? ']'
+							: (preg_match('~^-- |^#~', $found) ? "\n"
+							: preg_quote($found) . ($c_style_escapes ? "|\\\\." : "")))
+						);
+
+						while (preg_match("($pattern|\$)s", $query, $match, PREG_OFFSET_CAPTURE, $offset)) {
 							$s = $match[0][0];
 							if (!$s && $fp && !feof($fp)) {
 								$query .= fread($fp, 1e5);
 							} else {
 								$offset = $match[0][1] + strlen($s);
-								if ($s[0] != "\\") {
+								if (!$s || $s[0] != "\\") {
 									break;
 								}
 							}
@@ -97,8 +109,8 @@ if (!$error && $_POST) {
 						$empty = false;
 						$q = substr($query, 0, $pos);
 						$commands++;
-						$print = "<pre id='sql-$commands'><code class='jush-$jush'>" . $adminer->sqlCommandQuery($q) . "</code></pre>\n";
-						if ($jush == "sqlite" && preg_match("~^$space*+ATTACH\\b~i", $q, $match)) {
+						$print = "<pre id='sql-$commands'><code class='jush-" . JUSH . "'>" . $adminer->sqlCommandQuery($q) . "</code></pre>\n";
+						if (JUSH == "sqlite" && preg_match("~^$space*+ATTACH\\b~i", $q, $match)) {
 							// PHP doesn't support setting SQLITE_LIMIT_ATTACHED
 							echo $print;
 							echo "<p class='error'>" . lang('ATTACH queries are not supported.') . "\n";
@@ -133,7 +145,7 @@ if (!$error && $_POST) {
 									$time = " <span class='time'>(" . format_time($start) . ")</span>"
 										. (strlen($q) < 1000 ? " <a href='" . h(ME) . "sql=" . urlencode(trim($q)) . "'>" . lang('Edit') . "</a>" : "") // 1000 - maximum length of encoded URL in IE is 2083 characters
 									;
-									$affected = $connection->affected_rows; // getting warnigns overwrites this
+									$affected = $connection->affected_rows; // getting warnings overwrites this
 									$warnings = ($_POST["only_errors"] ? "" : $driver->warnings());
 									$warnings_id = "warnings-$commands";
 									if ($warnings) {
@@ -174,7 +186,7 @@ if (!$error && $_POST) {
 									}
 									echo ($warnings ? "<div id='$warnings_id' class='hidden'>\n$warnings</div>\n" : "");
 									if ($explain) {
-										echo "<div id='$explain_id' class='hidden'>\n";
+										echo "<div id='$explain_id' class='hidden explain'>\n";
 										select($explain, $connection2, $orgtables);
 										echo "</div>\n";
 									}
@@ -225,7 +237,7 @@ if (!isset($_GET["import"])) {
 	echo script(($_POST ? "" : "qs('textarea').focus();\n") . "qs('#form').onsubmit = partial(sqlSubmit, qs('#form'), '" . js_escape(remove_from_uri("sql|limit|error_stops|only_errors|history")) . "');");
 	echo "<p>$execute\n";
 	echo lang('Limit rows') . ": <input type='number' name='limit' class='size' value='" . h($_POST ? $_POST["limit"] : $_GET["limit"]) . "'>\n";
-	
+
 } else {
 	echo "<fieldset><legend>" . lang('File upload') . "</legend><div>";
 	$gz = (extension_loaded("zlib") ? "[.gz]" : "");
@@ -255,7 +267,7 @@ if (!isset($_GET["import"]) && $history) {
 		list($q, $time, $elapsed) = $val;
 		echo '<a href="' . h(ME . "sql=&history=$key") . '">' . lang('Edit') . "</a>"
 			. " <span class='time' title='" . @date('Y-m-d', $time) . "'>" . @date("H:i:s", $time) . "</span>" // @ - time zone may be not set
-			. " <code class='jush-$jush'>" . shorten_utf8(ltrim(str_replace("\n", " ", str_replace("\r", "", preg_replace('~^(#|-- ).*~m', '', $q)))), 80, "</code>")
+			. " <code class='jush-" . JUSH . "'>" . shorten_utf8(ltrim(str_replace("\n", " ", str_replace("\r", "", preg_replace('~^(#|-- ).*~m', '', $q)))), 80, "</code>")
 			. ($elapsed ? " <span class='time'>($elapsed)</span>" : "")
 			. "<br>\n"
 		;

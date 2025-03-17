@@ -1,6 +1,24 @@
 <?php
-function connect_error() {
-	global $adminer, $connection, $token, $error, $drivers;
+namespace Adminer;
+
+if (isset($_GET["status"])) {
+	$_GET["variables"] = $_GET["status"];
+}
+if (isset($_GET["import"])) {
+	$_GET["sql"] = $_GET["import"];
+}
+
+if (
+	!(DB != ""
+		? $connection->select_db(DB)
+		: isset($_GET["sql"]) || isset($_GET["dump"]) || isset($_GET["database"]) || isset($_GET["processlist"]) || isset($_GET["privileges"]) || isset($_GET["user"]) || isset($_GET["variables"])
+			|| $_GET["script"] == "connect" || $_GET["script"] == "kill"
+	)
+) {
+	if (DB != "" || $_GET["refresh"]) {
+		restart_session();
+		set_session("dbs", null);
+	}
 	if (DB != "") {
 		header("HTTP/1.1 404 Not Found");
 		page_header(lang('Database') . ": " . h(DB), lang('Invalid database.'), true);
@@ -8,16 +26,18 @@ function connect_error() {
 		if ($_POST["db"] && !$error) {
 			queries_redirect(substr(ME, 0, -1), lang('Databases have been dropped.'), drop_databases($_POST["db"]));
 		}
-		
+
 		page_header(lang('Select database'), $error, false);
 		echo "<p class='links'>\n";
-		foreach (array(
-			'database' => lang('Create database'),
-			'privileges' => lang('Privileges'),
-			'processlist' => lang('Process list'),
-			'variables' => lang('Variables'),
-			'status' => lang('Status'),
-		) as $key => $val) {
+		foreach (
+			array(
+				'database' => lang('Create database'),
+				'privileges' => lang('Privileges'),
+				'processlist' => lang('Process list'),
+				'variables' => lang('Variables'),
+				'status' => lang('Status'),
+			) as $key => $val
+		) {
 			if (support($key)) {
 				echo "<a href='" . h(ME) . "$key='>$val</a>\n";
 			}
@@ -29,23 +49,23 @@ function connect_error() {
 			$scheme = support("scheme");
 			$collations = collations();
 			echo "<form action='' method='post'>\n";
-			echo "<table cellspacing='0' class='checkable'>\n";
+			echo "<table class='checkable odds'>\n";
 			echo script("mixin(qsl('table'), {onclick: tableClick, ondblclick: partialArg(tableClick, true)});");
 			echo "<thead><tr>"
 				. (support("database") ? "<td>" : "")
-				. "<th>" . lang('Database') . " - <a href='" . h(ME) . "refresh=1'>" . lang('Refresh') . "</a>"
+				. "<th>" . lang('Database') . (get_session("dbs") !== null ? " - <a href='" . h(ME) . "refresh=1'>" . lang('Refresh') . "</a>" : "")
 				. "<td>" . lang('Collation')
 				. "<td>" . lang('Tables')
 				. "<td>" . lang('Size') . " - <a href='" . h(ME) . "dbsize=1'>" . lang('Compute') . "</a>" . script("qsl('a').onclick = partial(ajaxSetHtml, '" . js_escape(ME) . "script=connect');", "")
 				. "</thead>\n"
 			;
-			
+
 			$databases = ($_GET["dbsize"] ? count_tables($databases) : array_flip($databases));
-			
+
 			foreach ($databases as $db => $tables) {
 				$root = h(ME) . "db=" . urlencode($db);
 				$id = h("Db-" . $db);
-				echo "<tr" . odd() . ">" . (support("database") ? "<td>" . checkbox("db[]", $db, in_array($db, (array) $_POST["db"]), "", "", "", $id) : "");
+				echo "<tr>" . (support("database") ? "<td>" . checkbox("db[]", $db, in_array($db, (array) $_POST["db"]), "", "", "", $id) : "");
 				echo "<th><a href='$root' id='$id'>" . h($db) . "</a>";
 				$collation = h(db_collation($db, $collations));
 				echo "<td>" . (support("database") ? "<a href='$root" . ($scheme ? "&amp;ns=" : "") . "&amp;database=' title='" . lang('Alter database') . "'>$collation</a>" : $collation);
@@ -53,7 +73,7 @@ function connect_error() {
 				echo "<td align='right' id='size-" . h($db) . "'>" . ($_GET["dbsize"] ? db_size($db) : "?");
 				echo "\n";
 			}
-			
+
 			echo "</table>\n";
 			echo (support("database")
 				? "<div class='footer'><div>\n"
@@ -69,23 +89,8 @@ function connect_error() {
 			echo script("tableCheck();");
 		}
 	}
-	
+
 	page_footer("db");
-}
-
-if (isset($_GET["status"])) {
-	$_GET["variables"] = $_GET["status"];
-}
-if (isset($_GET["import"])) {
-	$_GET["sql"] = $_GET["import"];
-}
-
-if (!(DB != "" ? $connection->select_db(DB) : isset($_GET["sql"]) || isset($_GET["dump"]) || isset($_GET["database"]) || isset($_GET["processlist"]) || isset($_GET["privileges"]) || isset($_GET["user"]) || isset($_GET["variables"]) || $_GET["script"] == "connect" || $_GET["script"] == "kill")) {
-	if (DB != "" || $_GET["refresh"]) {
-		restart_session();
-		set_session("dbs", null);
-	}
-	connect_error(); // separate function to catch SQLite error
 	exit;
 }
 

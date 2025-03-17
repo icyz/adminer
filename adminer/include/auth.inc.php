@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $connection = '';
 
 $has_token = $_SESSION["token"];
@@ -17,7 +19,17 @@ if ($_COOKIE["adminer_permanent"]) {
 
 function add_invalid_login() {
 	global $adminer;
-	$fp = file_open_lock(get_temp_dir() . "/adminer.invalid");
+	$base = get_temp_dir() . "/adminer.invalid";
+	// adminer.invalid may not be writable by us, try the files with random suffixes
+	foreach (glob("$base*") ?: array($base) as $filename) {
+		$fp = file_open_lock($filename);
+		if ($fp) {
+			break;
+		}
+	}
+	if (!$fp) {
+		$fp = file_open_lock("$base-" . rand_string());
+	}
 	if (!$fp) {
 		return;
 	}
@@ -40,7 +52,15 @@ function add_invalid_login() {
 
 function check_invalid_login() {
 	global $adminer;
-	$invalids = unserialize(@file_get_contents(get_temp_dir() . "/adminer.invalid")); // @ - may not exist
+	$invalids = array();
+	foreach (glob(get_temp_dir() . "/adminer.invalid*") as $filename) {
+		$fp = file_open_lock($filename);
+		if ($fp) {
+			$invalids = unserialize(stream_get_contents($fp));
+			file_unlock($fp);
+			break;
+		}
+	}
 	$invalid = ($invalids ? $invalids[$adminer->bruteForceKey()] : array());
 	$next_attempt = ($invalid[1] > 29 ? $invalid[0] - time() : 0); // allow 30 invalid attempts
 	if ($next_attempt > 0) { //! do the same with permanent login
@@ -59,12 +79,13 @@ if ($auth) {
 	set_password($vendor, $server, $username, $password);
 	$_SESSION["db"][$vendor][$server][$username][$db] = true;
 	if ($auth["permanent"]) {
-		$key = base64_encode($vendor) . "-" . base64_encode($server) . "-" . base64_encode($username) . "-" . base64_encode($db);
+		$key = implode("-", array_map('base64_encode', array($vendor, $server, $username, $db)));
 		$private = $adminer->permanentLogin(true);
 		$permanent[$key] = "$key:" . base64_encode($private ? encrypt_string($password, $private) : "");
 		cookie("adminer_permanent", implode(" ", $permanent));
 	}
-	if (count($_POST) == 1 // 1 - auth
+	if (
+		count($_POST) == 1 // 1 - auth
 		|| DRIVER != $vendor
 		|| SERVER != $server
 		|| $_GET["username"] !== $username // "0" == "00"
@@ -72,14 +93,14 @@ if ($auth) {
 	) {
 		redirect(auth_url($vendor, $server, $username, $db));
 	}
-	
+
 } elseif ($_POST["logout"] && (!$has_token || verify_token())) {
 	foreach (array("pwds", "db", "dbs", "queries") as $key) {
 		set_session($key, null);
 	}
 	unset_permanent();
 	redirect(substr(preg_replace('~\b(username|db|ns)=[^&]*&~', '', ME), 0, -1), lang('Logout successful.') . ' ' . lang('Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.'));
-	
+
 } elseif ($permanent && !$_SESSION["pwds"]) {
 	session_regenerate_id();
 	$private = $adminer->permanentLogin();
@@ -130,7 +151,7 @@ function auth_error($error) {
 		$error = lang('Session support must be enabled.');
 	}
 	$params = session_get_cookie_params();
-	cookie("adminer_key", ($_COOKIE["adminer_key"] ? $_COOKIE["adminer_key"] : rand_string()), $params["lifetime"]);
+	cookie("adminer_key", ($_COOKIE["adminer_key"] ?: rand_string()), $params["lifetime"]);
 	page_header(lang('Login'), $error, null);
 	echo "<form action='' method='post'>\n";
 	echo "<div>";
@@ -144,10 +165,10 @@ function auth_error($error) {
 	exit;
 }
 
-if (isset($_GET["username"]) && !class_exists("Min_DB")) {
+if (isset($_GET["username"]) && !class_exists('Adminer\Db')) {
 	unset($_SESSION["pwds"][DRIVER]);
 	unset_permanent();
-	page_header(lang('No extension'), lang('None of the supported PHP extensions (%s) are available.', implode(", ", $possible_drivers)), false);
+	page_header(lang('No extension'), lang('None of the supported PHP extensions (%s) are available.', implode(", ", Driver::$possibleDrivers)), false);
 	page_footer("auth");
 	exit;
 }
@@ -160,13 +181,21 @@ if (isset($_GET["username"]) && is_string(get_password())) {
 		auth_error(lang('Connecting to privileged ports is not allowed.'));
 	}
 	check_invalid_login();
-	$connection = connect();
-	$driver = new Min_Driver($connection);
+	$connection = connect($adminer->credentials());
+	if (is_object($connection)) {
+		$driver = new Driver($connection);
+		if ($adminer->operators === null) {
+			$adminer->operators = $driver->operators;
+		}
+		if (isset($connection->maria) || $connection->cockroach) {
+			save_settings(array("vendor-" . SERVER => $drivers[DRIVER]));
+		}
+	}
 }
 
 $login = null;
 if (!is_object($connection) || ($login = $adminer->login($_GET["username"], get_password())) !== true) {
-	$error = (is_string($connection) ? h($connection) : (is_string($login) ? $login : lang('Invalid credentials.')));
+	$error = (is_string($connection) ? nl_br(h($connection)) : (is_string($login) ? $login : lang('Invalid credentials.')));
 	auth_error($error . (preg_match('~^ | $~', get_password()) ? '<br>' . lang('There is a space in the input password which might be the cause.') : ''));
 }
 
@@ -199,7 +228,7 @@ if ($_POST) {
 			: lang('Invalid CSRF token. Send the form again.') . ' ' . lang('If you did not send this request from Adminer then close this page.')
 		);
 	}
-	
+
 } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
 	// posted form with no data means that post_max_size exceeded because Adminer always sends token at least
 	$error = lang('Too big POST data. Reduce the data or increase the %s configuration directive.', "'post_max_size'");

@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'ログイン',
 	'Logout successful.' => 'ログアウト',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'データベースを作成',
 	'SQL command' => 'SQLコマンド',
 	'Logout' => 'ログアウト',
-	'database' => 'データベース',
 	'Use' => '使用',
 	'No tables.' => 'テーブルがありません。',
 	'select' => '選択',
@@ -95,7 +96,7 @@ $translations = array(
 	'ON DELETE' => 'ON DELETE',
 	'ON UPDATE' => 'ON UPDATE',
 	'Index Type' => '索引の型',
-	'Column (length)' => '列（長さ）',
+	'length' => '長さ',
 	'View has been dropped.' => 'ビューを削除しました',
 	'View has been altered.' => 'ビューを変更しました',
 	'View has been created.' => 'ビューを作成しました',

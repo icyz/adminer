@@ -93,10 +93,6 @@ tbody tr:hover th {
 	background: none;
 }
 
-table:not(.checkable) th {
-	min-width: 120px;
-}
-
 thead td,
 thead th {
 	background: #34567c;
@@ -140,8 +136,7 @@ table.checkable tbody tr:hover th {
 	background: #bfb008;
 }
 
-.odd th,
-.odd td {
+.odds tbody tr:nth-child(2n) {
 	background: #f5f5f5;
 }
 
@@ -270,7 +265,7 @@ p code + a:visited:hover {
 
 #menu #dbs {
 	background: #fff;
-	padding: 0 15px 15px;
+	padding: 0;
 	border: 1px solid #dae8fa;
 	border-bottom: 0;
 	box-sizing: border-box;
@@ -280,7 +275,6 @@ p code + a:visited:hover {
 #menu #dbs select {
 	outline: 0;
 	border-color: rgba(0, 0, 0, 0.1);
-	width: 100%;
 }
 
 #menu p.links {
@@ -308,6 +302,11 @@ p code + a:visited:hover {
 	font-weight: normal;
 	background: #fff;
 	color: #000;
+}
+
+.tables-filter {
+	padding: 0;
+	margin-top: 32px;
 }
 
 #content p.links {
@@ -522,7 +521,7 @@ input.default {
 select {
 	box-sizing: border-box;
 	margin: 0;
-	padding: 6px 0;
+	padding: 6px;
 	border: 1px solid #bbbbbb;
 }
 
@@ -652,11 +651,11 @@ label {
 	.logout {
 		display: none;
 	}
-	
+
 	#breadcrumb {
 		position: static;
 	}
-	
+
 	#content {
 		margin: 0;
 	}

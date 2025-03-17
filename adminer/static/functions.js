@@ -65,7 +65,7 @@ function mixin(target, source) {
 /** Add or remove CSS class
 * @param HTMLElement
 * @param string
-* @param [bool]
+* @param [boolean]
 */
 function alterClass(el, className, enable) {
 	if (el) {
@@ -79,7 +79,7 @@ function alterClass(el, className, enable) {
 */
 function toggle(id) {
 	var el = qs('#' + id);
-	el.className = (el.className == 'hidden' ? '' : 'hidden');
+	alterClass(el, 'hidden', !/(^|\s)hidden(\s|$)/.test(el.className));
 	return false;
 }
 
@@ -139,7 +139,7 @@ function selectValue(select) {
 /** Verify if element has a specified tag name
 * @param HTMLElement
 * @param string regular expression
-* @return bool
+* @return boolean
 */
 function isTag(el, tag) {
 	var re = new RegExp('^(' + tag + ')$', 'i');
@@ -333,7 +333,7 @@ function setHtml(id, html) {
 */
 function nodePosition(el) {
 	var pos = 0;
-	while (el = el.previousSibling) {
+	while ((el = el.previousSibling)) {
 		pos++;
 	}
 	return pos;
@@ -366,7 +366,7 @@ function menuOver(event) {
 * @this HTMLElement
 */
 function menuOut() {
-	this.style.overflow = 'auto';
+	this.style.overflow = 'hidden';
 }
 
 
@@ -568,7 +568,7 @@ function functionChange() {
 * @this HTMLTableCellElement
 */
 function skipOriginal(first) {
-	var fnSelect = this.previousSibling.firstChild;
+	var fnSelect = qs('select', this.previousSibling);
 	if (fnSelect.selectedIndex < first) {
 		fnSelect.selectedIndex = first;
 	}
@@ -662,7 +662,7 @@ function ajaxForm(form, message, button) {
 		}
 	}
 	data = data.join('&');
-	
+
 	var url = form.action;
 	if (!/post/i.test(form.method)) {
 		url = url.replace(/\?.*/, '') + '?' + data;
@@ -708,9 +708,13 @@ function selectClick(event, text, warning) {
 			td.innerHTML = original;
 		}
 	};
-	var pos = event.rangeOffset;
-	var value = (td.firstChild && td.firstChild.alt) || td.textContent || td.innerText;
-	input.style.width = Math.max(td.clientWidth - 14, 20) + 'px'; // 14 = 2 * (td.border + td.padding + input.border)
+
+	let pos = event.rangeOffset;
+	let value = (td.firstChild && td.firstChild.alt) || td.textContent || td.innerText;
+	const tdStyle = window.getComputedStyle(td, null);
+
+	input.style.width = Math.max(td.clientWidth - parseFloat(tdStyle.paddingLeft) - parseFloat(tdStyle.paddingRight), 20) + 'px';
+
 	if (text) {
 		var rows = 1;
 		value.replace(/\n/g, function () {
@@ -874,15 +878,6 @@ function addEvent(el, action, handler) {
 	} else {
 		el.attachEvent('on' + action, handler);
 	}
-}
-
-/** Defer focusing element
-* @param HTMLElement
-*/
-function focus(el) {
-	setTimeout(function () { // this has to be an anonymous function because Firefox passes some arguments to setTimeout callback
-		el.focus();
-	}, 0);
 }
 
 /** Clone node and setup submit highlighting

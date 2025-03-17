@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'เข้าสู่ระบบ',
 	'Logout successful.' => 'ออกจากระบบเรียบร้อยแล้ว.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'สร้างฐานข้อมูล',
 	'SQL command' => 'คำสั่ง SQL',
 	'Logout' => 'ออกจากระบบ',
-	'database' => 'ฐานข้อมูล',
 	'Use' => 'ใช้งาน',
 	'No tables.' => 'ไม่พบตาราง.',
 	'select' => 'เลือก',
@@ -96,7 +97,7 @@ $translations = array(
 	'ON DELETE' => 'ON DELETE',
 	'ON UPDATE' => 'ON UPDATE',
 	'Index Type' => 'ชนิดของดัชนี',
-	'Column (length)' => 'คอลัมน์ (ความยาว)',
+	'length' => 'ความยาว',
 	'View has been dropped.' => 'วิวถูกลบแล้ว.',
 	'View has been altered.' => 'วิวถูกเปลี่ยนแปลงแล้ว.',
 	'View has been created.' => 'วิวถูกสร้างแล้ว.',

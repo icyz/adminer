@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Sistem',
@@ -73,7 +75,6 @@ $translations = array(
 	'Data' => 'Data',
 
 	'Database' => 'Basis data',
-	'database' => 'basis data',
 	'Use' => 'Gunakan',
 	'Select database' => 'Pilih basis data',
 	'Invalid database.' => 'Basis data tidak sah.',
@@ -183,7 +184,7 @@ $translations = array(
 	'Alter indexes' => 'Ubah indeks',
 	'Add next' => 'Tambah setelahnya',
 	'Index Type' => 'Jenis Indeks',
-	'Column (length)' => 'Kolom (panjang)',
+	'length' => 'panjang',
 
 	'Foreign keys' => 'Kunci asing',
 	'Foreign key' => 'Kunci asing',

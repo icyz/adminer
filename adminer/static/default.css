@@ -1,5 +1,6 @@
 /** @author Ondrej Valka, http://valka.info */
-body { color: #000; background: #fff; font: 90%/1.25 Verdana, Arial, Helvetica, sans-serif; margin: 0; width: -moz-fit-content; width: fit-content; }
+
+body { color: #000; background: #fff; font: 90%/1.25 Verdana, Arial, Helvetica, sans-serif; margin: 0; min-width: fit-content; }
 a { color: blue; text-decoration: none; }
 a:visited { color: navy; }
 a:link:hover, a:visited:hover { color: red; text-decoration: underline; }
@@ -22,14 +23,18 @@ td img { max-width: 200px; max-height: 200px; }
 code { background: #eee; }
 tbody tr:hover td, tbody tr:hover th { background: #eee; }
 pre { margin: 1em 0 0; }
+td pre { margin: 0; }
 pre, textarea { font: 100%/1.25 monospace; }
-input { vertical-align: middle; }
+pre.jush { background: #fff; }
+pre code { display: block; }
+input, textarea { box-sizing: border-box; }
+input, select { vertical-align: middle; }
+input[type="radio"] { vertical-align: text-bottom; }
 input.default { box-shadow: 1px 1px 1px #777; }
-input.required { box-shadow: 1px 1px 1px red; }
-input.maxlength { box-shadow: 1px 1px 1px red; }
+input.required, input.maxlength { box-shadow: 1px 1px 1px red; }
 input.wayoff { left: -1000px; position: absolute; }
 .block { display: block; }
-.version { color: #777; font-size: 67%; }
+.version { color: #777; font-size: 62%; }
 .js .hidden, .nojs .jsonly { display: none; }
 .js .column { position: absolute; background: #ddf; padding: .27em 1ex .3em 0; margin-top: -.27em; }
 .nowrap td, .nowrap th, td.nowrap, p.nowrap { white-space: pre; }
@@ -43,20 +48,19 @@ input.wayoff { left: -1000px; position: absolute; }
 .date { color: #7F007F; }
 .enum { color: #007F7F; }
 .binary { color: red; }
-.odd td { background: #F5F5F5; }
+.odds tbody tr:nth-child(2n) { background: #F5F5F5; }
 .js .checkable .checked td, .js .checkable .checked th { background: #ddf; }
 .time { color: silver; font-size: 70%; }
-.function { text-align: right; }
-.number { text-align: right; }
-.datetime { text-align: right; }
-.type { width: 15ex; width: auto\9; }
-.options select { width: 20ex; width: auto\9; }
+.function, .number, .datetime { text-align: right; }
+.type { width: 15ex; }
+.options select, .options input { width: 20ex; }
 .view { font-style: italic; }
 .active { font-weight: bold; }
 .sqlarea { width: 98%; }
+.explain table { white-space: pre; }
 .icon { width: 18px; height: 18px; background-color: navy; }
 .icon:hover { background-color: red; }
-.size { width: 6ex; }
+.size { width: 7ex; }
 .help { cursor: help; }
 .footer { position: sticky; bottom: 0; margin-right: -20px; border-top: 20px solid rgba(255, 255, 255, .7); border-image: linear-gradient(rgba(255, 255, 255, .2), #fff) 100% 0; }
 .footer > div { background: #fff; padding: 0 0 .5em; }
@@ -65,18 +69,18 @@ input.wayoff { left: -1000px; position: absolute; }
 .logout { margin-top: .5em; position: absolute; top: 0; right: 0; }
 .loadmore { margin-left: 1ex; }
 /* .edit used in designs */
-#menu { position: absolute; margin: 10px 0 0; padding: 0 0 30px 0; top: 2em; left: 0; width: 19em; }
+#menu { position: absolute; margin: 10px 0 0; top: 2em; left: 0; width: 19em; }
 #menu p, #logins, #tables { padding: .8em 1em; margin: 0; border-bottom: 1px solid #ccc; }
 #logins li, #tables li { list-style: none; }
 #dbs { overflow: hidden; }
-#logins, #tables { white-space: nowrap; overflow: auto; }
+#logins, #tables { white-space: nowrap; overflow: hidden; }
 #logins a, #tables a, #tables span { background: #fff; }
 #content { margin: 2em 0 0 21em; padding: 10px 20px 20px 0; }
-#lang { position: absolute; top: 0; left: 0; line-height: 1.8em; padding: .3em 1em; }
+#lang { position: absolute; top: -2.6em; left: 0; padding: .3em 1em; }
 #breadcrumb { white-space: nowrap; position: absolute; top: 0; left: 21em; background: #eee; height: 2em; line-height: 1.8em; padding: 0 1em; margin: 0 0 0 -18px; }
 #h1 { color: #777; text-decoration: none; font-style: italic; }
-#version { font-size: 67%; color: red; }
-#schema { margin-left: 60px; position: relative; -moz-user-select: none; -webkit-user-select: none; }
+#version { color: red; }
+#schema { margin-left: 60px; position: relative; user-select: none; -webkit-user-select: none; }
 #schema .table { border: 1px solid silver; padding: 0 2px; cursor: move; position: absolute; }
 #schema .references { position: absolute; }
 #help { position: absolute; border: 1px solid #999; background: #eee; padding: 5px; font-family: monospace; z-index: 1; }
@@ -89,12 +93,14 @@ input.wayoff { left: -1000px; position: absolute; }
 .rtl .pages { left: auto; right: 21em; }
 .rtl input.wayoff { left: auto; right: -1000px; }
 .rtl #lang, .rtl #menu { left: auto; right: 0; }
+.rtl pre, .rtl code { direction: ltr; }
 
-@media all and (max-device-width: 880px) {
+@media all and (max-width: 880px) {
 	.pages { left: auto; }
+	.logout { position: static; padding: 0 1em 1em; }
 	#menu { position: static; width: auto; }
 	#content { margin-left: 10px; }
-	#lang { position: static; border-top: 1px solid #999; }
+	#lang { position: static; }
 	#breadcrumb { left: auto; }
 	.rtl .pages { right: auto; }
 	.rtl #content { margin-right: 10px; }

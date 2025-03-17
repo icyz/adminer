@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'Login',
 	'Logout successful.' => 'Sesión finalizada con éxito.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'Crear Base de datos',
 	'SQL command' => 'Comando SQL',
 	'Logout' => 'Cerrar sesión',
-	'database' => 'base de datos',
 	'Use' => 'Usar',
 	'No tables.' => 'No existen tablas.',
 	'select' => 'registros',
@@ -96,7 +97,7 @@ $translations = array(
 	'ON DELETE' => 'AL BORRAR',
 	'ON UPDATE' => 'AL ACTUALIZAR',
 	'Index Type' => 'Tipo de índice',
-	'Column (length)' => 'Columna (longitud)',
+	'length' => 'longitud',
 	'View has been dropped.' => 'Vista eliminada.',
 	'View has been altered.' => 'Vista modificada.',
 	'View has been created.' => 'Vista creada.',

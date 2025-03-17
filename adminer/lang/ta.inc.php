@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'நுழை',
 	'Logout successful.' => 'வெற்றிக‌ர‌மாய் வெளியேறியாயிற்று.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'த‌க‌வ‌ல்த‌ள‌த்தை உருவாக்கு',
 	'SQL command' => 'SQL க‌ட்ட‌ளை',
 	'Logout' => 'வெளியேறு',
-	'database' => 'த‌க‌வ‌ல்த‌ள‌ம்',
 	'Use' => 'உப‌யோகி',
 	'No tables.' => 'அட்ட‌வ‌ணை இல்லை.',
 	'select' => 'தேர்வு செய்',
@@ -94,7 +95,7 @@ $translations = array(
 	'ON DELETE' => 'ON DELETE',
 	'ON UPDATE' => 'ON UPDATE',
 	'Index Type' => 'அக‌வ‌ரிசை வ‌கை (Index Type)',
-	'Column (length)' => 'நெடுவ‌ரிசை (நீள‌ம்)',
+	'length' => 'நீள‌ம்',
 	'View has been dropped.' => 'தோற்ற‌ம் நீக்க‌ப்ப‌ட்ட‌து.',
 	'View has been altered.' => 'தோற்றம் மாற்றப்ப‌ட்ட‌து.',
 	'View has been created.' => 'தோற்ற‌ம் உருவாக்க‌ப்ப‌ட்ட‌து.',
@@ -228,7 +229,7 @@ $translations = array(
 	'Create sequence' => 'வ‌ரிசைமுறையை உருவாக்கு',
 	'User types' => 'ப‌ய‌னாள‌ர் வ‌கைக‌ள்',
 	'Create type' => 'வ‌கையை உருவாக்கு',
-	'Item%s has been inserted.' => 'உருப்ப‌டி (Item) சேர்க்க‌ப்ப‌ட்ட‌து.',
+	'Item%s has been inserted.' => 'உருப்ப‌டி (Item%s) சேர்க்க‌ப்ப‌ட்ட‌து.',
 	'Schema has been dropped.' => 'அமைப்புமுறை நீக்க‌ப்ப‌ட்ட‌து.',
 	'Schema has been created.' => 'அமைப்புமுறை உருவாக்க‌ப்ப‌ட்ட‌து.',
 	'Schema has been altered.' => 'அமைப்புமுறை மாற்ற‌ப்ப‌ட்ட‌து.',

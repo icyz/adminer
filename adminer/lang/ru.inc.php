@@ -1,4 +1,6 @@
 <?php
+namespace Adminer;
+
 $translations = array(
 	'Login' => 'Войти',
 	'Logout successful.' => 'Вы успешно покинули систему.',
@@ -31,7 +33,6 @@ $translations = array(
 	'Create database' => 'Создать базу данных',
 	'SQL command' => 'SQL-запрос',
 	'Logout' => 'Выйти',
-	'database' => 'база данных',
 	'Use' => 'Выбрать',
 	'No tables.' => 'В базе данных нет таблиц.',
 	'select' => 'выбрать',
@@ -96,7 +97,7 @@ $translations = array(
 	'ON DELETE' => 'При стирании',
 	'ON UPDATE' => 'При обновлении',
 	'Index Type' => 'Тип индекса',
-	'Column (length)' => 'Поле (длина)',
+	'length' => 'длина',
 	'View has been dropped.' => 'Представление было удалено.',
 	'View has been altered.' => 'Представление было изменено.',
 	'View has been created.' => 'Представление было создано.',
@@ -300,4 +301,5 @@ $translations = array(
 	'There is a space in the input password which might be the cause.' => 'В введеном пароле есть пробел, это может быть причиною.',
 	'Unknown error.' => 'Неизвестная ошибка.',
 	'Database does not support password.' => 'База данных не поддерживает пароль.',
+	'Disable %s or enable %s or %s extensions.' => 'Отключите %s или включите расширения %s или %s.',
 );
