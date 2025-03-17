@@ -39,7 +39,7 @@ class AdminerSuggestTableField
         .xborder{border: 1px inset rgb(204, 204, 204);}
         /*textarea.sqlarea {display: block!important;}*/
     </style>
-    <script<?php echo Adminer\nonce(); ?> type="text/javascript">
+    <script<?php echo Adminer\nonce() ?> type="text/javascript">
 
         function domReady(fn) {
             document.addEventListener("DOMContentLoaded", fn)
@@ -50,9 +50,9 @@ class AdminerSuggestTableField
 
         function insertNodeAtCaret(node) {
             if (typeof window.getSelection != "undefined") {
-                var sel = window.getSelection()
+                const sel = window.getSelection();
                 if (sel.rangeCount) {
-                    var range = sel.getRangeAt(0)
+                    let range = sel.getRangeAt(0);
                     range.collapse(false)
                     range.insertNode(node)
                     range = range.cloneRange()
@@ -61,14 +61,15 @@ class AdminerSuggestTableField
                     sel.removeAllRanges()
                     sel.addRange(range)
                 }
-            } else if (typeof document.selection != "undefined" && document.selection.type != "Control") {
-                var html = (node.nodeType == 1) ? node.outerHTML : node.data
-                var id = "marker_" + ("" + Math.random()).slice(2)
+            }
+            else if (typeof document.selection != "undefined" && document.selection.type != "Control") {
+                let html = (node.nodeType == 1) ? node.outerHTML : node.data;
+                const id = "marker_" + ("" + Math.random()).slice(2);
                 html += '<span id="' + id + '"></span>'
-                var textRange = document.selection.createRange()
+                const textRange = document.selection.createRange();
                 textRange.collapse(false)
                 textRange.pasteHTML(html)
-                var markerSpan = document.getElementById(id)
+                const markerSpan = document.getElementById(id);
                 textRange.moveToElementText(markerSpan)
                 textRange.select()
                 markerSpan.parentNode.removeChild(markerSpan)
@@ -76,9 +77,9 @@ class AdminerSuggestTableField
         }
 
         function getTable(suggests, tableName){
-            var table =  "<dt>"+ tableName +"</dt>"
-            for(var k in suggests[tableName]){
-                table += "<dd><a href='#' data-text='"+ tableName + "`.`" + suggests[tableName][k] +"'>"+ suggests[tableName][k] +"</a></dd>"
+            let table = "<dt>" + tableName + "</dt>";
+            for(let k in suggests[tableName]){
+                table += "<dd><a href='#' data-text='"+ suggests[tableName][k] +"'>"+ suggests[tableName][k] +"</a></dd>"
             }
             return table
         }
@@ -90,23 +91,24 @@ class AdminerSuggestTableField
         }
 
         domReady(() => {
+            let k;
             const suggests = JSON.parse('<?php echo json_encode($suggests) ?>')
             const form = document.getElementById('form')
             const sqlarea = document.getElementsByClassName('sqlarea')[0]
             form.style.position = "relative"
 
-            var suggests_mysql = ""
+            let suggests_mysql = "";
 
             suggests_mysql += "<dt><?php echo Adminer\lang('Tables') ?></dt>"
-            for(var k in suggests['___tables___']){
+            for(k in suggests['___tables___']){
                 suggests_mysql += "<dd><a href='#' data-table='1'>"+ suggests['___tables___'][k] +"</a></dd>"
             }
             suggests_mysql += "<dt><?php echo Adminer\lang('SQL command') ?></dt>"
-            for(var k in suggests['___mysql___']){
+            for(k in suggests['___mysql___']){
                 suggests_mysql += "<dd><a href='#' data-nobt='1'>"+ suggests['___mysql___'][k] +"</a></dd>"
             }
 
-            var posLeft = (sqlarea.offsetWidth + 3)
+            const posLeft = (sqlarea.offsetWidth + 3);
             form.insertAdjacentHTML('afterbegin',
                 '<div id="suggest_tablefields_container" style="height:'+ sqlarea.offsetHeight +'px;top:0;left:'+ posLeft +'px">'+
                 '<span class="noselect" id="suggest_tablefields_drag">drag</span>|'+
@@ -120,7 +122,7 @@ class AdminerSuggestTableField
                     return
                 }
                 if (event.target.matches('.jush-custom')) {
-                    var table = getTable(suggests, event.target.textContent)
+                    const table = getTable(suggests, event.target.textContent);
                     compile(table)
                     return
                 }
@@ -134,7 +136,7 @@ class AdminerSuggestTableField
 
             document.getElementById('suggest_tablefields').addEventListener('click', function (event){
                 if(event.target.matches('a') || event.target.matches('strong')){
-                    var target, text, bt = "`"
+                    let target, text, bt = "`";
                     if(event.target.matches('strong')) {
                         target = event.target = event.target.parentElement
                     }
@@ -155,7 +157,7 @@ class AdminerSuggestTableField
                     insertNodeAtCaret(document.createTextNode(bt + text + bt + " "))
 
                     if(target.getAttribute("data-table")){
-                        var table = getTable(suggests, target.textContent)
+                        const table = getTable(suggests, target.textContent);
                         compile(table)
                     }
 
@@ -165,21 +167,23 @@ class AdminerSuggestTableField
 
 
             document.getElementById('suggest_search').addEventListener('keyup', function () {
-                var value = this.value.toLowerCase()
+                let reg;
+                const value = this.value.toLowerCase();
 
                 if (value != '') {
-                    var reg = (value + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, '\\$1')
+                    reg = (value + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, '\\$1');
                     reg = new RegExp('('+ reg + ')', 'gi')
                 }
 
-                var tables = qsa('dd a', qs('#suggest_tablefields'))
-                for (var i = 0; i < tables.length; i++) {
-                    var a = tables[i]
-                    var text = tables[i].textContent
+                const tables = qsa('dd a', qs('#suggest_tablefields'));
+                for (let i = 0; i < tables.length; i++) {
+                    const a = tables[i];
+                    const text = tables[i].textContent;
                     if (value == '') {
                         tables[i].className = ''
                         a.innerHTML = text
-                    } else {
+                    }
+                    else {
                         tables[i].className = (text.toLowerCase().indexOf(value) == -1 ? 'hidden' : '')
                         a.innerHTML = text.replace(reg, '<strong>$1</strong>')
                     }
@@ -190,7 +194,7 @@ class AdminerSuggestTableField
 
             //drag / stick
             document.getElementById('suggest_tablefields_stick').addEventListener('click', function () {
-                var obj = document.getElementById('suggest_tablefields_container')
+                const obj = document.getElementById('suggest_tablefields_container');
                 obj.style.position = "absolute"
                 obj.style.left = this.getAttribute('data-pos-left')
                 obj.style.top = 0
@@ -201,10 +205,10 @@ class AdminerSuggestTableField
                 draggable('suggest_tablefields_container')
             }
 
-            var dragObj = null
+            let dragObj = null;
             function draggable(id) {
-                var obj = document.getElementById(id)
-                var m = document.getElementById('suggest_tablefields_drag')
+                const obj = document.getElementById(id);
+                const m = document.getElementById('suggest_tablefields_drag');
                 m.onmousedown = function(){
                     obj.style.position = "fixed"
                     obj.classList.add("xborder")
@@ -217,8 +221,8 @@ class AdminerSuggestTableField
             }
 
             document.onmousemove = function(e){
-                var x = e.pageX
-                var y = e.pageY
+                const x = e.pageX;
+                const y = e.pageY;
 
                 if(dragObj == null) return
 

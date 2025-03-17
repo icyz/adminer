@@ -7,6 +7,7 @@
 class AdminerFkDisable
 {
     private function deleteAllBetween($beginning, $end, $string) {
+        $end = (string)$end;
         $beginningPos = strpos($string, $beginning);
         $endPos = strpos($string, $end);
         if ($beginningPos === false || $endPos === false) {
@@ -24,7 +25,7 @@ class AdminerFkDisable
         }
 
         $query = trim(filter_input(INPUT_POST, 'query'));
-
+        $fk_disable_checked = "";
         if(filter_input(INPUT_POST, 'fk_disable')){
             if($query) {
                 $query = trim($this->deleteAllBetween("-- FK:D0", "-- FK:D1", $query));
@@ -36,7 +37,7 @@ class AdminerFkDisable
 
         ?>
 
-        <script<?php echo Adminer\nonce();?> type="text/javascript">
+        <script<?= Adminer\nonce() ?> type="text/javascript">
 
             function domReady(fn) {
                 document.addEventListener("DOMContentLoaded", fn);
@@ -46,7 +47,7 @@ class AdminerFkDisable
             }
 
             domReady(() => {
-                document.querySelectorAll('#form p')[1].insertAdjacentHTML('beforeend', '<label><input type="checkbox" name="fk_disable" value="1" <?= $fk_disable_checked ?> /><?= Adminer\lang('Disable Foreign Keys') ?></label>')
+                document.querySelectorAll('#form p')[1].insertAdjacentHTML('beforeend', '<label><input type="checkbox" name="fk_disable" value="1" <?= $fk_disable_checked ?> />Disable Foreign Keys</label>')
             })
 
         </script>
