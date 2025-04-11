@@ -54,7 +54,7 @@ if ($tables_views && !$error && !$_POST["search"]) {
 
 page_header(($_GET["ns"] == "" ? lang('Database') . ": " . h(DB) : lang('Schema') . ": " . h($_GET["ns"])), $error, true);
 
-if ($adminer->homepage()) {
+if (adminer()->homepage()) {
 	if ($_GET["ns"] !== "") {
 		echo "<h3 id='tables-views'>" . lang('Tables and views') . "</h3>\n";
 		$tables_list = tables_list();
@@ -69,7 +69,7 @@ if ($adminer->homepage()) {
 				echo " <input type='submit' name='search' value='" . lang('Search') . "'>\n";
 				echo "</div></fieldset>\n";
 				if ($_POST["search"] && $_POST["query"] != "") {
-					$_GET["where"][0]["op"] = $driver->convertOperator("LIKE %%");
+					$_GET["where"][0]["op"] = driver()->convertOperator("LIKE %%");
 					search_tables();
 				}
 			}
@@ -93,7 +93,7 @@ if ($adminer->homepage()) {
 			foreach ($tables_list as $name => $type) {
 				$view = ($type !== null && !preg_match('~table|sequence~i', $type));
 				$id = h("Table-" . $name);
-				echo '<tr><td>' . checkbox(($view ? "views[]" : "tables[]"), $name, in_array($name, $tables_views, true), "", "", "", $id);
+				echo '<tr><td>' . checkbox(($view ? "views[]" : "tables[]"), $name, in_array("$name", $tables_views, true), "", "", "", $id); // "$name" to check numeric table names
 				echo '<th>' . (support("table") || support("indexes") ? "<a href='" . h(ME) . "table=" . urlencode($name) . "' title='" . lang('Show structure') . "' id='$id'>" . h($name) . '</a>' : h($name));
 				if ($view) {
 					echo '<td colspan="6"><a href="' . h(ME) . "view=" . urlencode($name) . '" title="' . lang('Alter view') . '">' . (preg_match('~materialized~i', $type) ? lang('Materialized view') : lang('View')) . '</a>';
@@ -146,18 +146,18 @@ if ($adminer->homepage()) {
 				: "")))
 				. "<input type='submit' name='truncate' value='" . lang('Truncate') . "'> " . on_help(JUSH == "sqlite" ? "'DELETE'" : "'TRUNCATE" . (JUSH == "pgsql" ? "'" : " TABLE'")) . confirm()
 				. "<input type='submit' name='drop' value='" . lang('Drop') . "'>" . on_help("'DROP TABLE'") . confirm() . "\n";
-				$databases = (support("scheme") ? $adminer->schemas() : $adminer->databases());
+				$databases = (support("scheme") ? adminer()->schemas() : adminer()->databases());
 				if (count($databases) != 1 && JUSH != "sqlite") {
 					$db = (isset($_POST["target"]) ? $_POST["target"] : (support("scheme") ? $_GET["ns"] : DB));
-					echo "<p>" . lang('Move to other database') . ": ";
+					echo "<p><label>" . lang('Move to other database') . ": ";
 					echo ($databases ? html_select("target", $databases, $db) : '<input name="target" value="' . h($db) . '" autocapitalize="off">');
-					echo " <input type='submit' name='move' value='" . lang('Move') . "'>";
+					echo "</label> <input type='submit' name='move' value='" . lang('Move') . "'>";
 					echo (support("copy") ? " <input type='submit' name='copy' value='" . lang('Copy') . "'> " . checkbox("overwrite", 1, $_POST["overwrite"], lang('overwrite')) : "");
 					echo "\n";
 				}
 				echo "<input type='hidden' name='all' value=''>"; // used by trCheck()
 				echo script("qsl('input').onclick = function () { selectCount('selected', formChecked(this, /^(tables|views)\[/));" . (support("table") ? " selectCount('selected2', formChecked(this, /^tables\[/) || $tables);" : "") . " }");
-				echo "<input type='hidden' name='token' value='$token'>\n";
+				echo input_token();
 				echo "</div></fieldset>\n";
 				echo "</div></div>\n";
 			}
@@ -165,8 +165,8 @@ if ($adminer->homepage()) {
 			echo script("tableCheck();");
 		}
 
-		echo '<p class="links"><a href="' . h(ME) . 'create=">' . lang('Create table') . "</a>\n";
-		echo (support("view") ? '<a href="' . h(ME) . 'view=">' . lang('Create view') . "</a>\n" : "");
+		echo "<p class='links'><a href='" . h(ME) . "create='>" . lang('Create table') . "</a>\n";
+		echo (support("view") ? "<a href='" . h(ME) . "view='>" . lang('Create view') . "</a>\n" : "");
 
 		if (support("routine")) {
 			echo "<h3 id='routines'>" . lang('Routines') . "</h3>\n";

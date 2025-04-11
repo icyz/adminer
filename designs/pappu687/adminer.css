@@ -10,7 +10,11 @@ https://raw.github.com/vrana/adminer/master/designs/ng9/adminer.css
  *
  * adminer.php :allow in iframe(  if($b->headers()){header("X-Frame-Options: deny");header("X-XSS-Protection: 0");} )
  */
- ::-webkit-scrollbar-track-piece{
+html {
+	--fg: #555;
+}
+
+::-webkit-scrollbar-track-piece{
     background-color: rgba(180,180,180,0.06);
     border-radius:3px;
 }
@@ -138,6 +142,10 @@ table{
 
 tbody tr:hover td,tbody tr:hover th{
     background:#edf4ff
+}
+
+thead {
+	top: 50px;
 }
 
 thead th, thead td {
@@ -310,6 +318,8 @@ input[name=logout]:hover {
 .logout {
 	position: fixed;
 	z-index:3;
+	background-color: #48A5BF;
+	box-shadow: 0 0 4px 4px #48A5BF;
 }
 
 .logout form {

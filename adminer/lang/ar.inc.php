@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'تسجيل الدخول',
 	'Logout successful.' => 'تم تسجيل الخروج بنجاح.',
 	'Invalid credentials.' => 'بيانات الدخول غير صالحة.',
@@ -212,11 +212,6 @@ $translations = array(
 	'Binary' => 'ثنائية',
 	'Lists' => 'قوائم',
 	'Editor' => 'المحرر',
-	'E-mail' => 'البريد الإلكتروني',
-	'From' => 'من',
-	'Subject' => 'الموضوع',
-	'Send' => 'إرسال',
-	'%d e-mail(s) have been sent.' => 'تم إرسال %d رسالة.',
 	'Webserver file %s' => 'ملف %s من خادم الويب',
 	'File does not exist.' => 'الملف غير موجود.',
 	'%d in total' => '%d في المجموع',
@@ -251,7 +246,6 @@ $translations = array(
 	'Network' => 'شبكة',
 	'Geometry' => 'هندسة',
 	'File exists.' => 'الملف موجود.',
-	'Attachments' => 'ملفات مرفقة',
 	'Item%s has been inserted.' => '%sتم إدراج العنصر.',
 	'now' => 'الآن',
 	'%d query(s) executed OK.' => array('تم تنفيذ الاستعلام %d بنجاح.', 'تم تنفيذ الاستعلامات %d بنجاح.'),
@@ -266,3 +260,5 @@ $translations = array(
 	'Edit all' => 'تعديل الكل',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php ar` to update this file

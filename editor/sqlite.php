@@ -1,11 +1,12 @@
 <?php
+// see ../plugins/editor-setup.php for an easier solution
+
 function adminer_object() {
-	include_once "../plugins/plugin.php";
 	include_once "../plugins/login-password-less.php";
 
-	class AdminerCustomization extends AdminerPlugin {
+	class AdminerCustomization extends Adminer\Plugins {
 		function loginFormField($name, $heading, $value) {
-			return parent::loginFormField($name, $heading, str_replace('value="server"', 'value="sqlite"', $value));
+			return parent::loginFormField($name, $heading, str_replace("value='server'", "value='sqlite'", $value));
 		}
 		function database() {
 			return "PATH_TO_YOUR_SQLITE_HERE";

@@ -5,7 +5,7 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerDumpPhp {
+class AdminerDumpPhp extends Adminer\Plugin {
 	protected $output = array();
 
 	function dumpFormat() {
@@ -28,8 +28,7 @@ class AdminerDumpPhp {
 
 	function dumpData($table, $style, $query) {
 		if ($_POST['format'] == 'php') {
-			$connection = Adminer\connection();
-			$result = $connection->query($query, 1);
+			$result = Adminer\connection()->query($query, 1);
 			if ($result) {
 				while ($row = $result->fetch_assoc()) {
 					$this->output[$table][] = $row;
@@ -46,4 +45,12 @@ class AdminerDumpPhp {
 			echo ";\n";
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Export do formátu PHP'),
+		'de' => array('' => 'Export im PHP-Format'),
+		'pl' => array('' => 'Zrzucaj do formatu PHP'),
+		'ro' => array('' => 'Dump în format PHP'),
+		'ja' => array('' => 'PHP 形式でエクスポート'),
+	);
 }

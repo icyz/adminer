@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Intră',
 	'Logout successful.' => 'Ați ieșit cu succes.',
 	'Invalid credentials.' => 'Numele de utilizator sau parola este greșită.',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'Tip binar',
 	'Lists' => 'Liste',
 	'Editor' => 'Editor',
-	'E-mail' => 'Poșta electronică',
-	'From' => 'De la',
-	'Subject' => 'Pentru',
-	'Send' => 'Trimite',
-	'%d e-mail(s) have been sent.' => array('A fost trimis %d mail.', 'Au fost trimise %d mail-uri.'),
 	'Webserver file %s' => 'Fișierul %s pe server',
 	'File does not exist.' => 'Acest fișier nu există.',
 	'%d in total' => 'În total %d',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Rețea',
 	'Geometry' => 'Geometrie',
 	'File exists.' => 'Fișierul există deja.',
-	'Attachments' => 'Fișiere atașate',
 	'%d query(s) executed OK.' => array('%d query executat.', '%d query-uri executate cu succes.'),
 	'Show only errors' => 'Arată doar greșeli',
 	'Refresh' => 'Împrospătează',
@@ -267,3 +261,5 @@ $translations = array(
 	'Edit all' => 'Editează tot',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php ro` to update this file

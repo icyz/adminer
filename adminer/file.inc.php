@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-if (substr($VERSION, -4) != '-dev') {
+if (substr(VERSION, -4) != '-dev') {
 	if ($_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
 		header("HTTP/1.1 304 Not Modified");
 		exit;
@@ -11,10 +11,9 @@ if (substr($VERSION, -4) != '-dev') {
 	header("Cache-Control: immutable");
 }
 
-if ($_GET["file"] == "favicon.ico") {
-	header("Content-Type: image/x-icon");
-	echo lzw_decompress(compile_file('../adminer/static/favicon.ico', 'lzw_compress'));
-} elseif ($_GET["file"] == "default.css") {
+@ini_set("zlib.output_compression", '1'); // @ - may be disabled
+
+if ($_GET["file"] == "default.css") {
 	header("Content-Type: text/css; charset=utf-8");
 	echo lzw_decompress(compile_file('../adminer/static/default.css;../externals/jush/jush.css', 'minify_css'));
 } elseif ($_GET["file"] == "dark.css") {
@@ -26,6 +25,7 @@ if ($_GET["file"] == "favicon.ico") {
 } elseif ($_GET["file"] == "jush.js") {
 	header("Content-Type: text/javascript; charset=utf-8");
 	echo lzw_decompress(compile_file('../externals/jush/modules/jush.js;
+../externals/jush/modules/jush-autocomplete-sql.js;
 ../externals/jush/modules/jush-textarea.js;
 ../externals/jush/modules/jush-txt.js;
 ../externals/jush/modules/jush-js.js;
@@ -35,24 +35,8 @@ if ($_GET["file"] == "favicon.ico") {
 ../externals/jush/modules/jush-mssql.js;
 ../externals/jush/modules/jush-oracle.js;
 ../externals/jush/modules/jush-simpledb.js', 'minify_js'));
-} else {
-	header("Content-Type: image/gif");
-	switch ($_GET["file"]) {
-		case "plus.gif":
-			echo compile_file('../adminer/static/plus.gif');
-			break;
-		case "cross.gif":
-			echo compile_file('../adminer/static/cross.gif');
-			break;
-		case "up.gif":
-			echo compile_file('../adminer/static/up.gif');
-			break;
-		case "down.gif":
-			echo compile_file('../adminer/static/down.gif');
-			break;
-		case "arrow.gif":
-			echo compile_file('../adminer/static/arrow.gif');
-			break;
-	}
+} elseif ($_GET["file"] == "logo.png") {
+	header("Content-Type: image/png");
+	echo compile_file('../adminer/static/logo.png');
 }
 exit;

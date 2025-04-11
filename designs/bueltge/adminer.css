@@ -5,6 +5,11 @@
  * @version  02/18/2014
  */
 
+html {
+	--bg: #F9F9F9;
+	--fg: #333;
+}
+
 body {
 margin: 0;
 font-size: 12px;
@@ -312,6 +317,7 @@ font-size:10px;
 height: 23px;
 width: 255px;
 display: block;
+margin-top: -28px;
 padding: 1px 0;
 position: absolute;
 top: 0;

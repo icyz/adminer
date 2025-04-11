@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'நுழை',
 	'Logout successful.' => 'வெற்றிக‌ர‌மாய் வெளியேறியாயிற்று.',
 	'Invalid credentials.' => 'ச‌ரியான‌ விப‌ர‌ங்க‌ள் இல்லை.',
@@ -212,11 +212,6 @@ $translations = array(
 	'Binary' => 'பைன‌ரி',
 	'Lists' => 'ப‌ட்டிய‌ல்',
 	'Editor' => 'தொகுப்பாளர்',
-	'E-mail' => 'மின்ன‌ஞ்ச‌ல்',
-	'From' => 'அனுப்புனர்',
-	'Subject' => 'பொருள்',
-	'Send' => 'அனுப்பு',
-	'%d e-mail(s) have been sent.' => array('%d மின்ன‌ஞ்ச‌ல் அனுப்ப‌ப‌ட்ட‌து.', '%d மின்ன‌ஞ்ச‌ல்க‌ள் அனுப்ப‌ப்ப‌ட்ட‌ன‌.'),
 	'Webserver file %s' => 'வெப் ச‌ர்வ‌ர் கோப்பு %s',
 	'File does not exist.' => 'கோப்பு இல்லை.',
 	'%d in total' => 'மொத்தம் %d ',
@@ -252,7 +247,6 @@ $translations = array(
 	'Network' => 'நெட்வொர்க்',
 	'Geometry' => 'வ‌டிவ‌விய‌ல் (Geometry)',
 	'File exists.' => 'கோப்பு உள்ள‌து.',
-	'Attachments' => 'இணைப்புக‌ள்',
 	'now' => 'இப்பொழுது',
 	'%d query(s) executed OK.' => array('%d வின‌வ‌ல் செய‌ல்ப‌டுத்த‌ப்ப‌ட்ட‌து.', '%d வின‌வ‌ல்க‌ள் செய‌ல்ப‌டுத்த‌ப்ப‌ட்ட‌ன‌.'),
 	'Show only errors' => 'பிழைக‌ளை ம‌ட்டும் காண்பிக்க‌வும்',
@@ -266,3 +260,5 @@ $translations = array(
 	'Edit all' => 'அனைத்தையும் தொகு',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php ta` to update this file

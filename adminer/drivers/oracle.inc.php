@@ -1,15 +1,16 @@
 <?php
 namespace Adminer;
 
-$drivers["oracle"] = "Oracle (beta)";
+add_driver("oracle", "Oracle (beta)");
 
 if (isset($_GET["oracle"])) {
 	define('Adminer\DRIVER', "oracle");
-	if (extension_loaded("oci8")) {
-		class Db {
-			public $extension = "oci8", $server_info, $affected_rows, $errno, $error;
+
+	if (extension_loaded("oci8") && $_GET["ext"] != "pdo") {
+		class Db extends SqlDb {
+			public $extension = "oci8";
 			public $_current_db;
-			private $link, $result;
+			private $link;
 
 			function _error($errno, $error) {
 				if (ini_bool("html_errors")) {
@@ -19,27 +20,26 @@ if (isset($_GET["oracle"])) {
 				$this->error = $error;
 			}
 
-			function connect($server, $username, $password) {
+			function attach(?string $server, string $username, string $password): string {
 				$this->link = @oci_new_connect($username, $password, $server, "AL32UTF8");
 				if ($this->link) {
 					$this->server_info = oci_server_version($this->link);
-					return true;
+					return '';
 				}
 				$error = oci_error();
-				$this->error = $error["message"];
-				return false;
+				return $error["message"];
 			}
 
-			function quote($string) {
+			function quote(string $string): string {
 				return "'" . str_replace("'", "''", $string) . "'";
 			}
 
-			function select_db($database) {
+			function select_db(string $database) {
 				$this->_current_db = $database;
 				return true;
 			}
 
-			function query($query, $unbuffered = false) {
+			function query(string $query, bool $unbuffered = false) {
 				$result = oci_parse($this->link, $query);
 				$this->error = "";
 				if (!$result) {
@@ -60,23 +60,6 @@ if (isset($_GET["oracle"])) {
 				}
 				return $return;
 			}
-
-			function multi_query($query) {
-				return $this->result = $this->query($query);
-			}
-
-			function store_result() {
-				return $this->result;
-			}
-
-			function next_result() {
-				return false;
-			}
-
-			function result($query, $field = 0) {
-				$result = $this->query($query);
-				return (is_object($result) ? $result->fetch_column($field) : false);
-			}
 		}
 
 		class Result {
@@ -89,7 +72,7 @@ if (isset($_GET["oracle"])) {
 
 			private function convert($row) {
 				foreach ((array) $row as $key => $val) {
-					if (is_a($val, 'OCI-Lob')) {
+					if (is_a($val, 'OCILob') || is_a($val, 'OCI-Lob')) {
 						$row[$key] = $val->load();
 					}
 				}
@@ -104,16 +87,11 @@ if (isset($_GET["oracle"])) {
 				return $this->convert(oci_fetch_row($this->result));
 			}
 
-			function fetch_column($field) {
-				return (oci_fetch($this->result) ? oci_result($this->result, $field + 1) : false);
-			}
-
-			function fetch_field() {
+			function fetch_field(): \stdClass {
 				$column = $this->offset++;
 				$return = new \stdClass;
 				$return->name = oci_field_name($this->result, $column);
-				$return->orgname = $return->name;
-				$return->type = oci_field_type($this->result, $column);
+				$return->type = oci_field_type($this->result, $column); //! map to MySQL numbers
 				$return->charsetnr = (preg_match("~raw|blob|bfile~", $return->type) ? 63 : 0); // 63 - binary
 				return $return;
 			}
@@ -128,12 +106,11 @@ if (isset($_GET["oracle"])) {
 			public $extension = "PDO_OCI";
 			public $_current_db;
 
-			function connect($server, $username, $password) {
-				$this->dsn("oci:dbname=//$server;charset=AL32UTF8", $username, $password);
-				return true;
+			function attach(?string $server, string $username, string $password): string {
+				return $this->dsn("oci:dbname=//$server;charset=AL32UTF8", $username, $password);
 			}
 
-			function select_db($database) {
+			function select_db(string $database) {
 				$this->_current_db = $database;
 				return true;
 			}
@@ -144,25 +121,24 @@ if (isset($_GET["oracle"])) {
 
 
 	class Driver extends SqlDriver {
-		static $possibleDrivers = array("OCI8", "PDO_OCI");
+		static $extensions = array("OCI8", "PDO_OCI");
 		static $jush = "oracle";
 
+		public $insertFunctions = array( //! no parentheses
+			"date" => "current_date",
+			"timestamp" => "current_timestamp",
+		);
 		public $editFunctions = array(
-			array( //! no parentheses
-				"date" => "current_date",
-				"timestamp" => "current_timestamp",
-			), array(
-				"number|float|double" => "+/-",
-				"date|timestamp" => "+ interval/- interval",
-				"char|clob" => "||",
-			)
+			"number|float|double" => "+/-",
+			"date|timestamp" => "+ interval/- interval",
+			"char|clob" => "||",
 		);
 
 		public $operators = array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT IN", "IS NOT NULL", "SQL");
 		public $functions = array("length", "lower", "round", "upper");
 		public $grouping = array("avg", "count", "count distinct", "max", "min", "sum");
 
-		function __construct($connection) {
+		function __construct(Db $connection) {
 			parent::__construct($connection);
 			$this->types = array(
 				lang('Numbers') => array("number" => 38, "binary_float" => 12, "binary_double" => 21),
@@ -178,8 +154,7 @@ if (isset($_GET["oracle"])) {
 			return true; // automatic start
 		}
 
-		function insertUpdate($table, $rows, $primary) {
-			global $connection;
+		function insertUpdate(string $table, array $rows, array $primary) {
 			foreach ($rows as $set) {
 				$update = array();
 				$where = array();
@@ -190,7 +165,7 @@ if (isset($_GET["oracle"])) {
 					}
 				}
 				if (
-					!(($where && queries("UPDATE " . table($table) . " SET " . implode(", ", $update) . " WHERE " . implode(" AND ", $where)) && $connection->affected_rows)
+					!(($where && queries("UPDATE " . table($table) . " SET " . implode(", ", $update) . " WHERE " . implode(" AND ", $where)) && connection()->affected_rows)
 					|| queries("INSERT INTO " . table($table) . " (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")"))
 				) {
 					return false;
@@ -199,7 +174,7 @@ if (isset($_GET["oracle"])) {
 			return true;
 		}
 
-		function hasCStyleEscapes() {
+		function hasCStyleEscapes(): bool {
 			return true;
 		}
 	}
@@ -214,15 +189,7 @@ if (isset($_GET["oracle"])) {
 		return idf_escape($idf);
 	}
 
-	function connect($credentials) {
-		$connection = new Db;
-		if ($connection->connect($credentials[0], $credentials[1], $credentials[2])) {
-			return $connection;
-		}
-		return $connection->error;
-	}
-
-	function get_databases() {
+	function get_databases($flush) {
 		return get_vals(
 			"SELECT DISTINCT tablespace_name FROM (
 SELECT tablespace_name FROM user_tablespaces
@@ -234,7 +201,7 @@ ORDER BY 1"
 
 	function limit($query, $where, $limit, $offset = 0, $separator = " ") {
 		return ($offset ? " * FROM (SELECT t.*, rownum AS rnum FROM (SELECT $query$where) t WHERE rownum <= " . ($limit + $offset) . ") WHERE rnum > $offset"
-			: ($limit !== null ? " * FROM (SELECT $query$where) WHERE rownum <= " . ($limit + $offset)
+			: ($limit ? " * FROM (SELECT $query$where) WHERE rownum <= " . ($limit + $offset)
 			: " $query$where"
 		));
 	}
@@ -247,18 +214,13 @@ ORDER BY 1"
 		return get_val("SELECT value FROM nls_database_parameters WHERE parameter = 'NLS_CHARACTERSET'"); //! respect $db
 	}
 
-	function engines() {
-		return array();
-	}
-
 	function logged_user() {
 		return get_val("SELECT USER FROM DUAL");
 	}
 
 	function get_current_db() {
-		global $connection;
-		$db = $connection->_current_db ?: DB;
-		unset($connection->_current_db);
+		$db = connection()->_current_db ?: DB;
+		unset(connection()->_current_db);
 		return $db;
 	}
 
@@ -303,9 +265,6 @@ ORDER BY 1"
 UNION SELECT view_name, 'view', 0, 0 FROM $view" . ($name != "" ? " WHERE view_name = $search" : "") . "
 ORDER BY 1") as $row
 		) {
-			if ($name != "") {
-				return $row;
-			}
 			$return[$row["Name"]] = $row;
 		}
 		return $return;
@@ -382,8 +341,7 @@ ORDER BY ac.constraint_type, aic.column_position", $connection2) as $row
 	}
 
 	function error() {
-		global $connection;
-		return h($connection->error); //! highlight sqltext from offset
+		return h(connection()->error); //! highlight sqltext from offset
 	}
 
 	function explain($connection, $query) {
@@ -495,7 +453,7 @@ AND c_src.TABLE_NAME = " . q($table);
 		return apply_queries("DROP TABLE", $tables);
 	}
 
-	function last_id() {
+	function last_id($result) {
 		return 0; //!
 	}
 
@@ -509,15 +467,23 @@ AND c_src.TABLE_NAME = " . q($table);
 	}
 
 	function set_schema($scheme, $connection2 = null) {
-		global $connection;
 		if (!$connection2) {
-			$connection2 = $connection;
+			$connection2 = connection();
 		}
 		return $connection2->query("ALTER SESSION SET CURRENT_SCHEMA = " . idf_escape($scheme));
 	}
 
 	function show_variables() {
-		return get_key_vals('SELECT name, display_value FROM v$parameter');
+		return get_rows('SELECT name, display_value FROM v$parameter');
+	}
+
+	function show_status() {
+		$return = array();
+		$rows = get_rows('SELECT * FROM v$instance');
+		foreach (reset($rows) as $key => $val) {
+			$return[] = array($key, $val);
+		}
+		return $return;
 	}
 
 	function process_list() {
@@ -536,11 +502,6 @@ ON sql.sql_id = sess.sql_id
 WHERE sess.type = \'USER\'
 ORDER BY PROCESS
 ');
-	}
-
-	function show_status() {
-		$rows = get_rows('SELECT * FROM v$instance');
-		return reset($rows);
 	}
 
 	function convert_field($field) {

@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'লগইন',
 	'Logout successful.' => 'সফলভাবে লগআউট হয়েছে।',
 	'Invalid credentials.' => 'ভুল পাসওয়ার্ড।',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'বাইনারি',
 	'Lists' => 'তালিকা',
 	'Editor' => 'সম্পাদক',
-	'E-mail' => '​​ই-মেইল',
-	'From' => 'থেকে',
-	'Subject' => 'বিষয়',
-	'Send' => 'পাঠান',
-	'%d e-mail(s) have been sent.' => array('%d ইমেইল(গুলি) পাঠানো হয়েছে।', '%d ইমেইল(গুলি) পাঠানো হয়েছে।'),
 	'Webserver file %s' => 'ওয়েবসার্ভার ফাইল %s',
 	'File does not exist.' => 'ফাইলটির কোন অস্তিত্ব নেই।',
 	'%d in total' => 'সর্বমোটঃ %d টি',
@@ -252,7 +247,6 @@ $translations = array(
 	'Network' => 'নেটওয়ার্ক',
 	'Geometry' => 'জ্যামিতি',
 	'File exists.' => 'ফাইল রয়েছে।',
-	'Attachments' => 'সংযুক্তিগুলো',
 	'%d query(s) executed OK.' => array('SQL-অনুসন্ধান সফলভাবে সম্পন্ন হয়েছে।', '%d SQL-অনুসন্ধানসমূহ সফলভাবে সম্পন্ন হয়েছে।'),
 	'Show only errors' => 'শুধুমাত্র ত্রুটিগুলো দেখান',
 	'Refresh' => 'রিফ্রেশ',
@@ -266,3 +260,5 @@ $translations = array(
 	'Edit all' => 'সবগুলো সম্পাদনা করুন',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php bn` to update this file

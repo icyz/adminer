@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Войти',
 	'Logout successful.' => 'Вы успешно покинули систему.',
 	'Invalid credentials.' => 'Неправильное имя пользователя или пароль.',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'Двоичный тип',
 	'Lists' => 'Списки',
 	'Editor' => 'Редактор',
-	'E-mail' => 'Эл. почта',
-	'From' => 'От',
-	'Subject' => 'Тема',
-	'Send' => 'Послать',
-	'%d e-mail(s) have been sent.' => array('Было отправлено %d письмо.', 'Было отправлено %d письма.', 'Было отправлено %d писем.'),
 	'Webserver file %s' => 'Файл %s на вебсервере',
 	'File does not exist.' => 'Такого файла не существует.',
 	'%d in total' => 'Всего %d',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Сеть',
 	'Geometry' => 'Геометрия',
 	'File exists.' => 'Файл уже существует.',
-	'Attachments' => 'Прикреплённые файлы',
 	'%d query(s) executed OK.' => array('%d запрос выполнен успешно.', '%d запроса выполнено успешно.', '%d запросов выполнено успешно.'),
 	'Show only errors' => 'Только ошибки',
 	'Refresh' => 'Обновить',
@@ -302,4 +296,15 @@ $translations = array(
 	'Unknown error.' => 'Неизвестная ошибка.',
 	'Database does not support password.' => 'База данных не поддерживает пароль.',
 	'Disable %s or enable %s or %s extensions.' => 'Отключите %s или включите расширения %s или %s.',
+	'Check has been dropped.' => 'Проверка удалена.',
+	'Check has been altered.' => 'Проверка изменена.',
+	'Check has been created.' => 'Проверка создана.',
+	'Alter check' => 'Изменить проверку',
+	'Create check' => 'Создать проверку',
+	'Checks' => 'Проверки',
+	'Loaded plugins' => 'Загруженные плагины',
+	'%s must <a%s>return an array</a>.' => '%s должна <a%s>вернуть массив</a>.',
+	'<a%s>Configure</a> %s in %s.' => '<a%s>Настроить</a> %s в %s.',
 );
+
+// run `php ../../lang.php ru` to update this file

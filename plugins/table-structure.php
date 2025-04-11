@@ -6,13 +6,12 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerTableStructure {
+class AdminerTableStructure extends Adminer\Plugin {
 
 	/** Print table structure in tabular format
-	* @param array data about individual fields
-	* @return bool
+	* @param Field[] $fields data about individual fields
 	*/
-	function tableStructurePrint($fields) {
+	function tableStructurePrint(array $fields, $tableStatus = null): bool {
 		echo "<div class='scrollable'>\n";
 		echo "<table class='nowrap odds'>\n";
 		echo "<thead><tr>"
@@ -38,4 +37,12 @@ class AdminerTableStructure {
 		echo "</div>\n";
 		return true;
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Rozšířené informace o tabulkách'),
+		'de' => array('' => 'Erweiterte Ausgabe der Tabellenstruktur'),
+		'pl' => array('' => 'Rozszerzone wyjście struktury tabeli'),
+		'ro' => array('' => 'Ieșirea expandată a structurii tabelei'),
+		'ja' => array('' => 'テーブル構造を拡張表示'),
+	);
 }

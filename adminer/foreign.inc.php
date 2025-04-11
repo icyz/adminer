@@ -31,7 +31,7 @@ if ($_POST && !$error && !$_POST["add"] && !$_POST["change"] && !$_POST["change-
 		$result
 	);
 	if (!$row["drop"]) {
-		$error = "$error<br>" . lang('Source and target columns must have the same data type, there must be an index on the target columns and referenced data must exist.'); //! no partitioning
+		$error = lang('Source and target columns must have the same data type, there must be an index on the target columns and referenced data must exist.'); //! no partitioning
 	}
 }
 
@@ -58,7 +58,7 @@ if ($_POST) {
 <?php
 $source = array_keys(fields($TABLE)); //! no text and blob
 if ($row["db"] != "") {
-	$connection->select_db($row["db"]);
+	connection()->select_db($row["db"]);
 }
 if ($row["ns"] != "") {
 	$orig_schema = get_schema();
@@ -67,26 +67,26 @@ if ($row["ns"] != "") {
 $referencable = array_keys(array_filter(table_status('', true), 'Adminer\fk_support'));
 $target = array_keys(fields(in_array($row["table"], $referencable) ? $row["table"] : reset($referencable)));
 $onchange = "this.form['change-js'].value = '1'; this.form.submit();";
-echo "<p>" . lang('Target table') . ": " . html_select("table", $referencable, $row["table"], $onchange) . "\n";
+echo "<p><label>" . lang('Target table') . ": " . html_select("table", $referencable, $row["table"], $onchange) . "</label>\n";
 if (support("scheme")) {
-	$schemas = array_filter($adminer->schemas(), function ($schema) {
+	$schemas = array_filter(adminer()->schemas(), function ($schema) {
 		return !preg_match('~^information_schema$~i', $schema);
 	});
-	echo lang('Schema') . ": " . html_select("ns", $schemas, $row["ns"] != "" ? $row["ns"] : $_GET["ns"], $onchange);
+	echo "<label>" . lang('Schema') . ": " . html_select("ns", $schemas, $row["ns"] != "" ? $row["ns"] : $_GET["ns"], $onchange) . "</label>";
 	if ($row["ns"] != "") {
 		set_schema($orig_schema);
 	}
 } elseif (JUSH != "sqlite") {
 	$dbs = array();
-	foreach ($adminer->databases() as $db) {
+	foreach (adminer()->databases() as $db) {
 		if (!information_schema($db)) {
 			$dbs[] = $db;
 		}
 	}
-	echo lang('DB') . ": " . html_select("db", $dbs, $row["db"] != "" ? $row["db"] : $_GET["db"], $onchange);
+	echo "<label>" . lang('DB') . ": " . html_select("db", $dbs, $row["db"] != "" ? $row["db"] : $_GET["db"], $onchange) . "</label>";
 }
+echo input_hidden("change-js");
 ?>
-<input type="hidden" name="change-js" value="">
 <noscript><p><input type="submit" name="change" value="<?php echo lang('Change'); ?>"></noscript>
 <table>
 <thead><tr><th id="label-source"><?php echo lang('Source'); ?><th id="label-target"><?php echo lang('Target'); ?></thead>
@@ -95,14 +95,14 @@ $j = 0;
 foreach ($row["source"] as $key => $val) {
 	echo "<tr>";
 	echo "<td>" . html_select("source[" . (+$key) . "]", array(-1 => "") + $source, $val, ($j == count($row["source"]) - 1 ? "foreignAddRow.call(this);" : ""), "label-source");
-	echo "<td>" . html_select("target[" . (+$key) . "]", $target, $row["target"][$key], "", "label-target");
+	echo "<td>" . html_select("target[" . (+$key) . "]", $target, idx($row["target"], $key), "", "label-target");
 	$j++;
 }
 ?>
 </table>
 <p>
-<?php echo lang('ON DELETE'); ?>: <?php echo html_select("on_delete", array(-1 => "") + explode("|", $driver->onActions), $row["on_delete"]); ?>
- <?php echo lang('ON UPDATE'); ?>: <?php echo html_select("on_update", array(-1 => "") + explode("|", $driver->onActions), $row["on_update"]); ?>
+<label><?php echo lang('ON DELETE'); ?>: <?php echo html_select("on_delete", array(-1 => "") + explode("|", driver()->onActions), $row["on_delete"]); ?></label>
+<label><?php echo lang('ON UPDATE'); ?>: <?php echo html_select("on_update", array(-1 => "") + explode("|", driver()->onActions), $row["on_update"]); ?></label>
 <?php echo doc_link(array(
 	'sql' => "innodb-foreign-key-constraints.html",
 	'mariadb' => "foreign-keys/",
@@ -116,5 +116,5 @@ foreach ($row["source"] as $key => $val) {
 <?php if ($name != "") { ?>
 <input type="submit" name="drop" value="<?php echo lang('Drop'); ?>"><?php echo confirm(lang('Drop %s?', $name)); ?>
 <?php } ?>
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 </form>

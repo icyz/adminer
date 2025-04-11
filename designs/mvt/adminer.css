@@ -15,6 +15,10 @@
 /*! normalize.css v4.2.0 | MIT License | github.com/necolas/normalize.css */
 
 html {
+	--bg: #eef0f0;
+}
+
+html {
 	font-family: sans-serif;
 	line-height: 1.15;
 	-ms-text-size-adjust: 100%;
@@ -363,6 +367,10 @@ tbody tr:hover td, tbody tr:hover th {
 	background: #edf4ff
 }
 
+thead {
+	top: 34px;
+}
+
 thead td, thead th {
 	text-align: center;
 	vertical-align: middle;
@@ -405,6 +413,8 @@ thead td abbr, thead td sup, thead th acronym, thead th sup {
 
 .logout {
 	top: 28px;
+	background-color: #31587d;
+	box-shadow: 0 0 3px 3px #31587d;
 }
 
 .js .column {

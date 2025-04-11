@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'System' => 'System',
 	'Server' => 'Server',
 	'Username' => 'Brukernavn',
@@ -238,12 +238,6 @@ $translations = array(
 	'Clone' => 'Klon',
 	'Delete' => 'Slett',
 	'You have no privileges to update this table.' => 'Du mangler rettighetene som trengs for å endre denne tabellen.',
-	'E-mail' => 'E-post',
-	'From' => 'Fra',
-	'Subject' => 'Tittel',
-	'Attachments' => 'Vedlegg',
-	'Send' => 'Send',
-	'%d e-mail(s) have been sent.' => array('%d epost sendt.', '%d eposter sendt.'),
 	'Numbers' => 'Nummer',
 	'Date and time' => 'Dato og tid',
 	'Strings' => 'Strenger',
@@ -281,3 +275,5 @@ $translations = array(
 	'Alter type' => 'Endre type',
 	'Saving' => 'Lagrer',
 );
+
+// run `php ../../lang.php no` to update this file

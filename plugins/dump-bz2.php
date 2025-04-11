@@ -7,7 +7,7 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerDumpBz2 {
+class AdminerDumpBz2 extends Adminer\Plugin {
 	protected $filename, $fp;
 
 	function dumpOutput() {
@@ -36,4 +36,12 @@ class AdminerDumpBz2 {
 			ob_start(array($this, '_bz2'), 1e6);
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Export do formátu Bzip2'),
+		'de' => array('' => 'Export im Bzip2-Format'),
+		'pl' => array('' => 'Zrzuć do formatu Bzip2'),
+		'ro' => array('' => 'Dump în format Bzip2'),
+		'ja' => array('' => 'Bzip2 形式でエクスポート'),
+	);
 }

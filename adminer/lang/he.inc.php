@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'התחברות',
 	'Logout successful.' => 'ההתחברות הצליחה',
 	'Invalid credentials.' => 'פרטי התחברות שגויים',
@@ -212,11 +212,6 @@ $translations = array(
 	'Binary' => 'בינארי',
 	'Lists' => 'רשימות',
 	'Editor' => 'עורך',
-	'E-mail' => 'דוא"ל',
-	'From' => 'מ:',
-	'Subject' => 'נושא',
-	'Send' => 'שלח',
-	'%d e-mail(s) have been sent.' => '%d הודעות דוא"ל נשלחו',
 	'Webserver file %s' => 'קובץ השרת %s',
 	'File does not exist.' => 'הקובץ אינו קיים',
 	'%d in total' => '%d בסך הכל',
@@ -251,7 +246,6 @@ $translations = array(
 	'Network' => 'רשת',
 	'Geometry' => 'גיאומטריה',
 	'File exists.' => 'קובץ קיים',
-	'Attachments' => 'קבצים מצורפים',
 	'Item%s has been inserted.' => 'הפריט %s הוזן בהצלחה',
 	'now' => 'כעת',
 	'%d query(s) executed OK.' => '%d שאילתות בוצעו בהצלחה',
@@ -292,3 +286,5 @@ $translations = array(
 	'yes' => 'כן',
 	'no' => 'לא',
 );
+
+// run `php ../../lang.php he` to update this file

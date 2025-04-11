@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Inicia la sessió',
 	'Logout successful.' => 'Desconnexió correcta.',
 	'Invalid credentials.' => 'Credencials invàlides.',
@@ -206,11 +206,6 @@ $translations = array(
 	'History' => 'Història',
 	'Variables' => 'Variables',
 	'Source and target columns must have the same data type, there must be an index on the target columns and referenced data must exist.' => 'Les columnes d\'origen i de destinació han de ser del mateix tipus, la columna de destinació ha d\'estar indexada i les dades referenciades han d\'existir.',
-	'E-mail' => 'Correu electrònic',
-	'From' => 'De',
-	'Subject' => 'Assumpte',
-	'Send' => 'Envia',
-	'%d e-mail(s) have been sent.' => array('S\'ha enviat %d correu electrònic.', 'S\'han enviat %d correus electrònics.'),
 	'Run file' => 'Executa el fitxer',
 	'Numbers' => 'Nombres',
 	'Date and time' => 'Data i hora',
@@ -225,7 +220,6 @@ $translations = array(
 	'File does not exist.' => 'El fitxer no existeix.',
 	'Permanent login' => 'Sessió permanent',
 	'%d in total' => '%d en total',
-	'Attachments' => 'Adjuncions',
 	'System' => 'Sistema',
 	'last' => 'darrera',
 	'Network' => 'Xarxa',
@@ -267,3 +261,5 @@ $translations = array(
 	'Edit all' => 'Edita-ho tot',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php ca` to update this file

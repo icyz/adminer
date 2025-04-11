@@ -1,11 +1,10 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'$1-$3-$5' => '$1-$3-$5',
 	'%.3f s' => '%.3f 초',
 	'%d byte(s)' => '%d 바이트',
-	'%d e-mail(s) have been sent.' => '%d개 메일을 보냈습니다.',
 	'%d in total' => '총 %d개',
 	'%d item(s) have been affected.' => '%d개 항목을 갱신했습니다.',
 	'%d process(es) have been killed.' => '%d개 프로세스를 강제 종료하였습니다.',
@@ -38,7 +37,6 @@ $translations = array(
 	'anywhere' => '모든',
 	'Are you sure?' => '실행 하시겠습니까?',
 	'At given time' => '지정 시간',
-	'Attachments' => '첨부 파일',
 	'Auto Increment' => '자동 증가',
 	'Binary' => '이진',
 	'Call' => '호출',
@@ -80,7 +78,6 @@ $translations = array(
 	'Delete' => '삭제',
 	'descending' => '역순',
 	'Drop' => '삭제',
-	'E-mail' => '메일',
 	'Edit all' => '모두 편집',
 	'Edit' => '편집',
 	'edit' => '편집',
@@ -109,7 +106,6 @@ $translations = array(
 	'Foreign keys' => '외부 키',
 	'Format' => '형식',
 	'From server' => '서버에서 실행',
-	'From' => '보낸 사람',
 	'Functions' => '함수',
 	'Geometry' => '기하 형',
 	'Grant' => '권한 부여',
@@ -211,7 +207,6 @@ $translations = array(
 	'Select' => '선택',
 	'select' => '선택',
 	'Selected' => '선택됨',
-	'Send' => '보내기',
 	'Sequence has been altered.' => '시퀀스를 변경했습니다.',
 	'Sequence has been created.' => '시퀀스를 추가했습니다.',
 	'Sequence has been dropped.' => '시퀀스를 제거했습니다.',
@@ -230,7 +225,6 @@ $translations = array(
 	'Status' => '상태',
 	'Stop on error' => '오류의 경우 중지',
 	'Strings' => '문자열',
-	'Subject' => '제목',
 	'System' => '데이터베이스 형식',
 	'Table has been altered.' => '테이블을 변경했습니다.',
 	'Table has been created.' => '테이블을 만들었습니다.',
@@ -279,3 +273,5 @@ $translations = array(
 	'You can upload a big SQL file via FTP and import it from server.' => '큰 SQL 파일은 FTP를 통하여 업로드하여 서버에서 가져올 수 있습니다.',
 	'You have no privileges to update this table.' => '이 테이블을 업데이트할 권한이 없습니다.',
 );
+
+// run `php ../../lang.php ko` to update this file

@@ -9,6 +9,11 @@ $row["fields"] = (array) $row["fields"];
 if ($_POST && !process_fields($row["fields"]) && !$error) {
 	$orig = routine($_GET["procedure"], $routine);
 	$temp_name = "$row[name]_adminer_" . uniqid();
+	foreach ($row["fields"] as $key => $field) {
+		if ($field["field"] == "") {
+			unset($row["fields"][$key]);
+		}
+	}
 	drop_create(
 		"DROP $routine " . routine_id($PROCEDURE, $orig),
 		create_routine($routine, $row),
@@ -26,9 +31,13 @@ if ($_POST && !process_fields($row["fields"]) && !$error) {
 
 page_header(($PROCEDURE != "" ? (isset($_GET["function"]) ? lang('Alter function') : lang('Alter procedure')) . ": " . h($PROCEDURE) : (isset($_GET["function"]) ? lang('Create function') : lang('Create procedure'))), $error);
 
-if (!$_POST && $PROCEDURE != "") {
-	$row = routine($_GET["procedure"], $routine);
-	$row["name"] = $PROCEDURE;
+if (!$_POST) {
+	if ($PROCEDURE == "") {
+		$row["language"] = "sql";
+	} else {
+		$row = routine($_GET["procedure"], $routine);
+		$row["name"] = $PROCEDURE;
+	}
 }
 
 $collations = get_vals("SHOW CHARACTER SET");
@@ -39,7 +48,7 @@ echo ($collations ? "<datalist id='collations'>" . optionlist($collations) . "</
 
 <form action="" method="post" id="form">
 <p><?php echo lang('Name'); ?>: <input name="name" value="<?php echo h($row["name"]); ?>" data-maxlength="64" autocapitalize="off">
-<?php echo ($routine_languages ? lang('Language') . ": " . html_select("language", $routine_languages, $row["language"]) . "\n" : ""); ?>
+<?php echo ($routine_languages ? "<label>" . lang('Language') . ": " . html_select("language", $routine_languages, $row["language"]) . "</label>\n" : ""); ?>
 <input type="submit" value="<?php echo lang('Save'); ?>">
 <div class="scrollable">
 <table class="nowrap">
@@ -59,5 +68,5 @@ if (isset($_GET["function"])) {
 <?php if ($PROCEDURE != "") { ?>
 <input type="submit" name="drop" value="<?php echo lang('Drop'); ?>"><?php echo confirm(lang('Drop %s?', $PROCEDURE)); ?>
 <?php } ?>
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 </form>

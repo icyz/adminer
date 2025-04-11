@@ -7,25 +7,37 @@ if (isset($_GET["mongo"])) {
 	define('Adminer\DRIVER', "mongo");
 
 	if (class_exists('MongoDB\Driver\Manager')) {
-		class Db {
-			public $extension = "MongoDB", $server_info = MONGODB_VERSION, $affected_rows, $error, $last_id;
-			/** @var MongoDB\Driver\Manager */
-			public $_link;
+		class Db extends SqlDb {
+			public $extension = "MongoDB", $server_info = MONGODB_VERSION, $last_id;
+			/** @var \MongoDB\Driver\Manager */ public $_link;
 			public $_db, $_db_name;
 
-			function connect($uri, $options) {
-				$this->_link = new \MongoDB\Driver\Manager($uri, $options);
+			function attach($server, $username, $password): string {
+				$options = array();
+				if ($username . $password != "") {
+					$options["username"] = $username;
+					$options["password"] = $password;
+				}
+				$db = adminer()->database();
+				if ($db != "") {
+					$options["db"] = $db;
+				}
+				if (($auth_source = getenv("MONGO_AUTH_SOURCE"))) {
+					$options["authSource"] = $auth_source;
+				}
+				$this->_link = new \MongoDB\Driver\Manager("mongodb://$server", $options);
 				$this->executeDbCommand($options["db"], array('ping' => 1));
+				return '';
 			}
 
 			function executeCommand($command) {
-				return $this->executeDbCommand($this->_db_name);
+				return $this->executeDbCommand($this->_db_name, $command);
 			}
 
 			function executeDbCommand($db, $command) {
 				try {
 					return $this->_link->executeCommand($db, new \MongoDB\Driver\Command($command));
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					$this->error = $e->getMessage();
 					return array();
 				}
@@ -36,13 +48,13 @@ if (isset($_GET["mongo"])) {
 					$results = $this->_link->executeBulkWrite($namespace, $bulk);
 					$this->affected_rows = $results->$counter();
 					return true;
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					$this->error = $e->getMessage();
 					return false;
 				}
 			}
 
-			function query($query) {
+			function query($query, $unbuffered = false) {
 				return false;
 			}
 
@@ -51,7 +63,7 @@ if (isset($_GET["mongo"])) {
 				return true;
 			}
 
-			function quote($string) {
+			function quote($string): string {
 				return $string;
 			}
 		}
@@ -107,11 +119,12 @@ if (isset($_GET["mongo"])) {
 				return array_values($return);
 			}
 
-			function fetch_field() {
+			function fetch_field(): \stdClass {
 				$keys = array_keys($this->rows[0]);
 				$name = $keys[$this->offset++];
 				return (object) array(
 					'name' => $name,
+					'type' => 15,
 					'charsetnr' => $this->charset[$name],
 				);
 			}
@@ -169,7 +182,7 @@ if (isset($_GET["mongo"])) {
 			$driver = driver();
 			$fields = fields_from_edit();
 			if (!$fields) {
-				$result = $driver->select($table, array("*"), null, null, array(), 10);
+				$result = $driver->select($table, array("*"), array(), array(), array(), 10);
 				if ($result) {
 					while ($row = $result->fetch_assoc()) {
 						foreach ($row as $key => $val) {
@@ -230,7 +243,7 @@ if (isset($_GET["mongo"])) {
 							list(, $class, $val) = $match;
 							$val = new $class($val);
 						}
-						if (!in_array($op, adminer()->operators)) {
+						if (!in_array($op, adminer()->operators())) {
 							continue;
 						}
 						if (preg_match('~^\(f\)(.+)~', $op, $match)) {
@@ -281,10 +294,10 @@ if (isset($_GET["mongo"])) {
 
 
 	class Driver extends SqlDriver {
-		static $possibleDrivers = array("mongodb");
+		static $extensions = array("mongodb");
 		static $jush = "mongo";
 
-		public $editFunctions = array(array("json"));
+		public $insertFunctions = array("json");
 
 		public $operators = array(
 			"=",
@@ -310,7 +323,14 @@ if (isset($_GET["mongo"])) {
 
 		public $primary = "_id";
 
-		function select($table, $select, $where, $group, $order = array(), $limit = 1, $page = 0, $print = false) {
+		static function connect($server, $username, $password) {
+			if ($server == "") {
+				$server = "localhost:27017";
+			}
+			return parent::connect($server, $username, $password);
+		}
+
+		function select($table, array $select, array $where, array $group, array $order = array(), $limit = 1, $page = 0, $print = false) {
 			$select = ($select == array("*")
 				? array()
 				: array_fill_keys($select, 1)
@@ -324,20 +344,17 @@ if (isset($_GET["mongo"])) {
 				$val = preg_replace('~ DESC$~', '', $val, 1, $count);
 				$sort[$val] = ($count ? -1 : 1);
 			}
-			if (isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0) {
-				$limit = $_GET['limit'];
-			}
-			$limit = min(200, max(1, (int) $limit));
+			$limit = min(200, max(1, $limit));
 			$skip = $page * $limit;
 			try {
 				return new Result($this->conn->_link->executeQuery($this->conn->_db_name . ".$table", new \MongoDB\Driver\Query($where, array('projection' => $select, 'limit' => $limit, 'skip' => $skip, 'sort' => $sort))));
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$this->conn->error = $e->getMessage();
 				return false;
 			}
 		}
 
-		function update($table, $set, $queryWhere, $limit = 0, $separator = "\n") {
+		function update($table, array $set, $queryWhere, $limit = 0, $separator = "\n") {
 			$db = $this->conn->_db_name;
 			$where = sql_query_where_parser($queryWhere);
 			$bulk = new \MongoDB\Driver\BulkWrite(array());
@@ -367,7 +384,7 @@ if (isset($_GET["mongo"])) {
 			return $this->conn->executeBulkWrite("$db.$table", $bulk, 'getDeletedCount');
 		}
 
-		function insert($table, $set) {
+		function insert($table, array $set) {
 			$db = $this->conn->_db_name;
 			$bulk = new \MongoDB\Driver\BulkWrite(array());
 			if ($set['_id'] == '') {
@@ -390,11 +407,8 @@ if (isset($_GET["mongo"])) {
 
 	function table_status($name = "", $fast = false) {
 		$return = array();
-		foreach (tables_list() as $table => $type) {
-			$return[$table] = array("Name" => $table);
-			if ($name == $table) {
-				return $return[$table];
-			}
+		foreach (($name != "" ? array($name => 1) : tables_list()) as $table => $type) {
+			$return[$table] = array("Name" => $table, "Engine" => "");
 		}
 		return $return;
 	}
@@ -403,7 +417,7 @@ if (isset($_GET["mongo"])) {
 		return true;
 	}
 
-	function last_id() {
+	function last_id($result) {
 		return connection()->last_id;
 	}
 
@@ -420,53 +434,25 @@ if (isset($_GET["mongo"])) {
 		return $credentials[1];
 	}
 
-	function connect($credentials) {
-		$connection = new Db;
-		list($server, $username, $password) = $credentials;
-
-		if ($server == "") {
-			$server = "localhost:27017";
-		}
-
-		$options = array();
-		if ($username . $password != "") {
-			$options["username"] = $username;
-			$options["password"] = $password;
-		}
-		$db = adminer()->database();
-		if ($db != "") {
-			$options["db"] = $db;
-		}
-		if (($auth_source = getenv("MONGO_AUTH_SOURCE"))) {
-			$options["authSource"] = $auth_source;
-		}
-		$connection->connect("mongodb://$server", $options);
-		if ($connection->error) {
-			return $connection->error;
-		}
-		return $connection;
-	}
-
 	function alter_indexes($table, $alter) {
-		$connection = connection();
 		foreach ($alter as $val) {
 			list($type, $name, $set) = $val;
 			if ($set == "DROP") {
-				$return = $connection->_db->command(array("deleteIndexes" => $table, "index" => $name));
+				$return = connection()->_db->command(array("deleteIndexes" => $table, "index" => $name));
 			} else {
 				$columns = array();
 				foreach ($set as $column) {
 					$column = preg_replace('~ DESC$~', '', $column, 1, $count);
 					$columns[$column] = ($count ? -1 : 1);
 				}
-				$return = $connection->_db->selectCollection($table)->ensureIndex($columns, array(
+				$return = connection()->_db->selectCollection($table)->ensureIndex($columns, array(
 					"unique" => ($type == "UNIQUE"),
 					"name" => $name,
 					//! "sparse"
 				));
 			}
 			if ($return['errmsg']) {
-				$connection->error = $return['errmsg'];
+				connection()->error = $return['errmsg'];
 				return false;
 			}
 		}
@@ -480,7 +466,7 @@ if (isset($_GET["mongo"])) {
 	function db_collation($db, $collations) {
 	}
 
-	function information_schema() {
+	function information_schema($db) {
 	}
 
 	function is_view($table_status) {
@@ -498,10 +484,6 @@ if (isset($_GET["mongo"])) {
 	}
 
 	function fk_support($table_status) {
-	}
-
-	function engines() {
-		return array();
 	}
 
 	function alter_table($table, $name, $fields, $foreign, $comment, $engine, $collation, $auto_increment, $partitioning) {

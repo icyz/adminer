@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => '系统',
 	'Server' => '服务器',
@@ -208,7 +208,6 @@ $translations = array(
 	'Alter indexes' => '修改索引',
 	'Add next' => '下一行插入',
 	'Index Type' => '索引类型',
-	// 'Column (length)' => '列（长度）',
 
 	'Foreign keys' => '外键',
 	'Foreign key' => '外键',
@@ -292,13 +291,6 @@ $translations = array(
 	'Delete' => '删除',
 	'You have no privileges to update this table.' => '您没有权限更新这个表。',
 
-	'E-mail' => '电子邮件',
-	'From' => '来自',
-	'Subject' => '主题',
-	'Attachments' => '附件',
-	'Send' => '发送',
-	'%d e-mail(s) have been sent.' => '%d 封邮件已发送。',
-
 	// data type descriptions
 	'Numbers' => '数字',
 	'Date and time' => '日期时间',
@@ -348,3 +340,5 @@ $translations = array(
 	'Type has been created.' => '已创建类型。',
 	'Alter type' => '修改类型',
 );
+
+// run `php ../../lang.php zh` to update this file

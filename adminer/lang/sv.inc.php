@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'System',
 	'Server' => 'Server',
@@ -292,13 +292,6 @@ $translations = array(
 	'Delete' => 'Ta bort',
 	'You have no privileges to update this table.' => 'Du har inga privilegier för att uppdatera den här tabellen.',
 
-	'E-mail' => 'Email',
-	'From' => 'Från',
-	'Subject' => 'Ämne',
-	'Attachments' => 'Bilagor',
-	'Send' => 'Skicka',
-	'%d e-mail(s) have been sent.' => array('%d email har blivit skickat.', '%d email har blivit skickade.'),
-
 	// data type descriptions
 	'Numbers' => 'Nummer',
 	'Date and time' => 'Datum och tid',
@@ -348,3 +341,5 @@ $translations = array(
 	'Type has been created.' => 'Typ har skapats.',
 	'Alter type' => 'Ändra typ',
 );
+
+// run `php ../../lang.php sv` to update this file

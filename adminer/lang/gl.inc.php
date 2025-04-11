@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Conectar',
 	'Logout successful.' => 'Pechouse a sesión con éxito.',
 	'Invalid credentials.' => 'Credenciais (usuario e/ou contrasinal) inválidos.',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'Binario',
 	'Lists' => 'Listas',
 	'Editor' => 'Editor',
-	'E-mail' => 'Email',
-	'From' => 'De',
-	'Subject' => 'Asunto',
-	'Send' => 'Enviar',
-	'%d e-mail(s) have been sent.' => array('%d email enviado.', '%d emails enviados.'),
 	'Webserver file %s' => 'Ficheiro de servidor web %s',
 	'File does not exist.' => 'O ficheiro non existe.',
 	'%d in total' => '%d en total',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Rede',
 	'Geometry' => 'Xeometría',
 	'File exists.' => 'O ficheiro xa existe.',
-	'Attachments' => 'Adxuntos',
 	'%d query(s) executed OK.' => array('%d consulta executada correctamente.', '%d consultas executadas correctamente.'),
 	'Show only errors' => 'Amosar só erros',
 	'Refresh' => 'Refrescar',
@@ -290,3 +284,5 @@ $translations = array(
 	'yes' => 'si',
 	'no' => 'non',
 );
+
+// run `php ../../lang.php gl` to update this file

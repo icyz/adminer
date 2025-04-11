@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Login',
 	'Logout successful.' => 'Abmeldung erfolgreich.',
 	'Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.' => 'Danke, dass Sie Adminer genutzt haben. <a href="https://www.adminer.org/de/donation/">Spenden willkommen!</a>.',
@@ -137,6 +137,7 @@ $translations = array(
 	'User has been created.' => 'Benutzer wurde erstellt.',
 	'Hashed' => 'Hashed',
 	'Column' => 'Spalte',
+	'Columns' => 'Spalten',
 	'Routine' => 'Routine',
 	'Grant' => 'Erlauben',
 	'Revoke' => 'Widerrufen',
@@ -215,11 +216,6 @@ $translations = array(
 	'Binary' => 'Binär',
 	'Lists' => 'Listen',
 	'Editor' => 'Editor',
-	'E-mail' => 'E-Mail',
-	'From' => 'Von',
-	'Subject' => 'Betreff',
-	'Send' => 'Abschicken',
-	'%d e-mail(s) have been sent.' => array('%d E-Mail abgeschickt.', '%d E-Mails abgeschickt.'),
 	'Webserver file %s' => 'Webserver Datei %s',
 	'File does not exist.' => 'Datei existiert nicht.',
 	'%d in total' => '%d insgesamt',
@@ -254,7 +250,6 @@ $translations = array(
 	'Network' => 'Netzwerk',
 	'Geometry' => 'Geometrie',
 	'File exists.' => 'Datei existiert schon.',
-	'Attachments' => 'Anhänge',
 	'%d query(s) executed OK.' => array('SQL-Abfrage erfolgreich ausgeführt.', '%d SQL-Abfragen erfolgreich ausgeführt.'),
 	'Show only errors' => 'Nur Fehler anzeigen',
 	'Refresh' => 'Aktualisieren',
@@ -294,7 +289,7 @@ $translations = array(
 	'DB' => 'DB',
 	'ATTACH queries are not supported.' => 'ATTACH Abfragen werden nicht unterstützt.',
 	'Warnings' => 'Warnungen',
-	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer unterstützt den Zugriff auf eine Datenbank ohne Passwort nicht, <a href="https://www.adminer.org/en/password/"%s>mehr Informationen</a>.',
+	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer unterstützt den Zugriff auf eine Datenbank ohne Passwort nicht, <a href="https://www.adminer.org/de/password/"%s>mehr Informationen</a>.',
 	'Full table scan' => 'Vollständige Überprüfung der Tabelle',
 	'The action will be performed after successful login with the same credentials.' => 'Die Aktion wird nach erfolgreicher Anmeldung mit denselben Anmeldedaten ausgeführt.',
 	'Connecting to privileged ports is not allowed.' => 'Die Verbindung zu privilegierten Ports ist nicht erlaubt.',
@@ -308,4 +303,10 @@ $translations = array(
 	'Alter check' => 'Check ändern',
 	'Create check' => 'Check erstellen',
 	'Checks' => 'Checks',
+	'Loaded plugins' => 'Geladene Plugins',
+	'%s must <a%s>return an array</a>.' => '%s muss <a%s>ein Array zurückgeben</a>.',
+	'<a%s>Configure</a> %s in %s.' => '<a%s>Konfigure</a> %s mit %s.',
+	'screenshot' => 'Screenshot',
 );
+
+// run `php ../../lang.php de` to update this file

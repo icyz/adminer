@@ -6,7 +6,7 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerDumpJson {
+class AdminerDumpJson extends Adminer\Plugin {
 	protected $database = false;
 
 	function dumpFormat() {
@@ -27,8 +27,7 @@ class AdminerDumpJson {
 				$this->database = true;
 				echo "{\n";
 			}
-			$connection = Adminer\connection();
-			$result = $connection->query($query, 1);
+			$result = Adminer\connection()->query($query, 1);
 			if ($result) {
 				echo '"' . addcslashes($table, "\r\n\"\\") . "\": [\n";
 				$first = true;
@@ -58,4 +57,12 @@ class AdminerDumpJson {
 			echo "}\n";
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Export do formátu JSON'),
+		'de' => array('' => 'Export im JSON-Format'),
+		'pl' => array('' => 'Zrzuć do formatu JSON'),
+		'ro' => array('' => 'Dump în format JSON'),
+		'ja' => array('' => 'JSON 形式でエクスポート'),
+	);
 }

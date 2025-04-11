@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Systém',
 	'Server' => 'Server',
@@ -42,6 +42,7 @@ $translations = array(
 	'User has been created.' => 'Uživatel byl vytvořen.',
 	'Hashed' => 'Zahašované',
 	'Column' => 'Sloupec',
+	'Columns' => 'Sloupce',
 	'Routine' => 'Procedura',
 	'Grant' => 'Povolit',
 	'Revoke' => 'Zakázat',
@@ -292,13 +293,6 @@ $translations = array(
 	'Delete' => 'Smazat',
 	'You have no privileges to update this table.' => 'Nemáte oprávnění editovat tuto tabulku.',
 
-	'E-mail' => 'E-mail',
-	'From' => 'Odesílatel',
-	'Subject' => 'Předmět',
-	'Attachments' => 'Přílohy',
-	'Send' => 'Odeslat',
-	'%d e-mail(s) have been sent.' => array('Byl odeslán %d e-mail.', 'Byly odeslány %d e-maily.', 'Bylo odesláno %d e-mailů.'),
-
 	// data type descriptions
 	'Numbers' => 'Čísla',
 	'Date and time' => 'Datum a čas',
@@ -355,4 +349,11 @@ $translations = array(
 	'Check has been created.' => 'Kontrola byla vytvořena.',
 	'Check has been altered.' => 'Kontrola byla změněna.',
 	'Check has been dropped.' => 'Kontrola byla odstraněna.',
+
+	'Loaded plugins' => 'Nahrané pluginy',
+	'%s must <a%s>return an array</a>.' => '%s musí <a%s>vracet pole</a>.',
+	'<a%s>Configure</a> %s in %s.' => '<a%s>Nakonfigurujte</a> %s v %s.',
+	'screenshot' => 'obrázek',
 );
+
+// run `php ../../lang.php cs` to update this file

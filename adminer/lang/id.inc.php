@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Sistem',
 	'Server' => 'Server',
@@ -259,13 +259,6 @@ $translations = array(
 	'Clone' => 'Gandakan',
 	'Delete' => 'Hapus',
 
-	'E-mail' => 'Surel',
-	'From' => 'Dari',
-	'Subject' => 'Judul',
-	'Attachments' => 'Lampiran',
-	'Send' => 'Kirim',
-	'%d e-mail(s) have been sent.' => '%d surel berhasil dikirim.',
-
 	// data type descriptions
 	'Numbers' => 'Angka',
 	'Date and time' => 'Tanggal dan waktu',
@@ -315,3 +308,5 @@ $translations = array(
 	'Type has been created.' => 'Jenis berhasil dibuat.',
 	'Alter type' => 'Ubah jenis',
 );
+
+// run `php ../../lang.php id` to update this file

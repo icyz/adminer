@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Aanmelden',
 	'Logout successful.' => 'Successvol afgemeld.',
 	'Invalid credentials.' => 'Ongeldige gebruikersgegevens.',
@@ -215,11 +215,6 @@ $translations = array(
 	'Binary' => 'Binaire gegevens',
 	'Lists' => 'Lijsten',
 	'Editor' => 'Editor',
-	'E-mail' => 'E-mail',
-	'From' => 'Van',
-	'Subject' => 'Onderwerp',
-	'Send' => 'Verzenden',
-	'%d e-mail(s) have been sent.' => array('%d e-mail verzonden.', '%d e-mails verzonden.'),
 	'Webserver file %s' => 'Webserver bestand %s',
 	'File does not exist.' => 'Bestand niet gevonden.',
 	'%d in total' => '%d in totaal',
@@ -243,7 +238,7 @@ $translations = array(
 	'Type has been dropped.' => 'Type verwijderd.',
 	'Type has been created.' => 'Type aangemaakt.',
 	'Ctrl+click on a value to modify it.' => 'Ctrl+klik op een waarde om deze te bewerken.',
-	'Use edit link to modify this value.' => 'Gebruik de link "bewerk" om deze waarde te wijzigen.',
+	'Use edit link to modify this value.' => 'Gebruik de link \'bewerk\' om deze waarde te wijzigen.',
 	'last' => 'laatste',
 	'From server' => 'Van server',
 	'System' => 'Databasesysteem',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Netwerk',
 	'Geometry' => 'Geometrie',
 	'File exists.' => 'Bestand bestaat reeds.',
-	'Attachments' => 'Bijlagen',
 	'%d query(s) executed OK.' => array('%d query succesvol uitgevoerd.', '%d querys succesvol uitgevoerd.'),
 	'Show only errors' => 'Enkel fouten tonen',
 	'Refresh' => 'Vernieuwen',
@@ -302,3 +296,5 @@ $translations = array(
 	'yes' => 'ja',
 	'no' => 'neen',
 );
+
+// run `php ../../lang.php nl` to update this file

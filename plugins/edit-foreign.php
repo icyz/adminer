@@ -6,7 +6,7 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerEditForeign {
+class AdminerEditForeign extends Adminer\Plugin {
 	protected $limit;
 
 	function __construct($limit = 0) {
@@ -39,4 +39,12 @@ class AdminerEditForeign {
 			}
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Výběr cizího klíče v editačním formuláři'),
+		'de' => array('' => 'Wählen Sie im Bearbeitungsformular den Fremdschlüssel aus'),
+		'pl' => array('' => 'Wybierz klucz obcy w formularzu edycji'),
+		'ro' => array('' => 'Selectați cheia străină în formularul de editare'),
+		'ja' => array('' => '外部キーを編集フォームで選択'),
+	);
 }

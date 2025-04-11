@@ -1,12 +1,12 @@
 <?php
 
-/** Exports one database (e.g. development) so that it can be synced with other database (e.g. production)
+/** Export one database (e.g. development) so that it can be synced with other database (e.g. production)
 * @link https://www.adminer.org/plugins/#use
 * @author Jakub Vrana, https://www.vrana.cz/
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerDumpAlter {
+class AdminerDumpAlter extends Adminer\Plugin {
 
 	function dumpFormat() {
 		if (Adminer\DRIVER == 'server') {
@@ -14,7 +14,7 @@ class AdminerDumpAlter {
 		}
 	}
 
-	private function database() {
+	private function dumpAlter() {
 		// drop old tables
 		$query = "SELECT TABLE_NAME, ENGINE, TABLE_COLLATION, TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE()";
 		echo "DELIMITER ;;
@@ -60,7 +60,7 @@ SELECT @adminer_alter;
 				$first = false;
 				echo "SET @adminer_alter = '';\n\n";
 			} else {
-				$this->database();
+				$this->dumpAlter();
 			}
 			return true;
 		}
@@ -164,7 +164,15 @@ DROP PROCEDURE adminer_alter;
 
 	function dumpFooter() {
 		if ($_POST["format"] == "sql_alter") {
-			$this->database();
+			$this->dumpAlter();
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Exportuje jednu databázi (např. vývojovou) tak, že může být synchronizována s jinou databází (např. produkční)'),
+		'de' => array('' => 'Exportiert eine Datenbank (z. B. Entwicklung), damit sie mit einer anderen Datenbank (z. B. Produktion) synchronisiert werden kann'),
+		'pl' => array('' => 'Eksportuje jedną bazę danych (np. programistyczną), aby można ją było zsynchronizować z inną bazą danych (np. produkcyjną)'),
+		'ro' => array('' => 'Exportați o bază de date (de exemplu, development) astfel încât să poată fi sincronizată cu o altă bază de date (de exemplu, de producție)'),
+		'ja' => array('' => 'データベース (開発用など) をエクスポートし、別のデータベース (本番用など) と同期'),
+	);
 }

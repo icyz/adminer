@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'เข้าสู่ระบบ',
 	'Logout successful.' => 'ออกจากระบบเรียบร้อยแล้ว.',
 	'Invalid credentials.' => 'ข้อมูลไม่ถูกต้อง.',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'เลขฐานสอง',
 	'Lists' => 'รายการ',
 	'Editor' => 'ผู้แก้ไข',
-	'E-mail' => 'อีเมล์',
-	'From' => 'จาก',
-	'Subject' => 'หัวข้อ',
-	'Send' => 'ส่ง',
-	'%d e-mail(s) have been sent.' => 'มี %d อีเมล์ ถูกส่งออกแล้ว.',
 	'Webserver file %s' => 'Webserver file %s',
 	'File does not exist.' => 'ไม่มีไฟล์.',
 	'%d in total' => '%d ของทั้งหมด',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'เครื่องข่าย',
 	'Geometry' => 'เรขาคณิต',
 	'File exists.' => 'มีไฟล์นี้อยู่แล้ว.',
-	'Attachments' => 'ไฟล์แนบ',
 	'%d query(s) executed OK.' => '%d คำสั่งถูกดำเนินการแล้ว.',
 	'Show only errors' => 'แสดงเฉพาะเออเรอ',
 	'Refresh' => 'โหลดใหม่',
@@ -267,3 +261,5 @@ $translations = array(
 	'Edit all' => 'แก้ไขทั้งหมด',
 	'HH:MM:SS' => 'HH:MM:SS',
 );
+
+// run `php ../../lang.php th` to update this file

@@ -6,15 +6,15 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerEmailTable {
+class AdminerEmailTable extends Adminer\Plugin {
 	protected $table, $id, $title, $subject, $message;
 
 	/**
-	* @param string quoted table name
-	* @param string quoted column name
-	* @param string quoted column name
-	* @param string quoted column name
-	* @param string quoted column name
+	* @param string $table quoted table name
+	* @param string $id quoted column name
+	* @param string $title quoted column name
+	* @param string $subject quoted column name
+	* @param string $message quoted column name
 	*/
 	function __construct($table = "email", $id = "id", $title = "subject", $subject = "subject", $message = "message") {
 		$this->table = $table;
@@ -34,11 +34,11 @@ class AdminerEmailTable {
 			echo "<p>" . ('Attachments') . ": <input type='file' name='email_files[]'>";
 			echo Adminer\script("qsl('input').onchange = function () {
 	this.onchange = function () { };
-	var el = this.cloneNode(true);
+	const el = this.cloneNode(true);
 	el.value = '';
 	this.parentNode.appendChild(el);
 };");
-			echo "<p>" . (count($emailFields) == 1 ? '<input type="hidden" name="email_field" value="' . Adminer\h(key($emailFields)) . '">' : Adminer\html_select("email_field", $emailFields));
+			echo "<p>" . (count($emailFields) == 1 ? Adminer\input_hidden("email_field", key($emailFields)) : Adminer\html_select("email_field", $emailFields));
 			echo "<input type='submit' name='email' value='" . ('Send') . "'>" . Adminer\confirm();
 			echo "</div>\n";
 			echo "</div></fieldset>\n";
@@ -47,12 +47,19 @@ class AdminerEmailTable {
 	}
 
 	function selectEmailProcess($where, $foreignKeys) {
-		$connection = Adminer\connection();
 		if ($_POST["email_id"]) {
-			$result = $connection->query("SELECT $this->subject, $this->message FROM $this->table WHERE $this->id = " . Adminer\q($_POST["email_id"]));
+			$result = Adminer\connection()->query("SELECT $this->subject, $this->message FROM $this->table WHERE $this->id = " . Adminer\q($_POST["email_id"]));
 			$row = $result->fetch_row();
 			$_POST["email_subject"] = $row[0];
 			$_POST["email_message"] = $row[1];
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Získá předmět a zprávu e-mailu z databáze (Adminer Editor)'),
+		'de' => array('' => 'E-Mail-Betreff und Nachricht aus der Datenbank abrufen (Adminer Editor)'),
+		'pl' => array('' => 'Pobieraj temat i wiadomość e-mail z bazy danych (Adminer Editor)'),
+		'ro' => array('' => 'Obțineți subiectul e-mailului și mesajul din baza de date (Adminer Editor)'),
+		'ja' => array('' => 'メールの件名と本文をデータベースから取得 (Adminer Editor)'),
+	);
 }

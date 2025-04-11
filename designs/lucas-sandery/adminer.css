@@ -16,6 +16,10 @@ Icons from http://FlatIcon.com:
 Background adapted from "All Work and No Play", http://thenewcode.com/1008/SVG-Movie-Backgrounds-Andys-Room-and-Overlook-Hotel
 */
 html {
+	--bg: #41658a;
+}
+
+html {
 	height: 100%;
 }
 body {
@@ -359,27 +363,22 @@ tbody tr:nth-child(n):hover th {
 	background: rgba(236, 72, 18, 0.45);
 }
 .icon {
-	height: 0;
-	padding-top: 1.2em;
 	width: 1.2em;
-	background: #4c3957 center no-repeat;
+	background-color: #4c3957;
 	background-size: 66%;
 }
-.icon[src*="file=plus.gif"] {
+.icon-plus {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='512px' height='512px' viewBox='0 0 456 456' style='enable-background:new 0 0 456 456;'%3E%3Cg%3E%3Cpolygon points='456,157.566 298.433,157.566 298.433,0 157.567,0 157.567,157.566 0,157.566 0,298.434 157.567,298.434 157.567,456 298.433,456 298.433,298.434 456,298.434' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
 }
-.icon[src*="file=minus.gif"] {
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='512px' height='512px' viewBox='0 0 456 456' style='enable-background:new 0 0 456 456;'%3E%3Cg%3E%3Cpolygon points='456,157.566 0,157.566 0,298.434 456,298.434' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
-}
 .column a[href*="&asc%5B"],
-.icon[src*="file=up.gif"] {
+.icon-up {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' viewBox='0 0 490 490' style='enable-background:new 0 0 490 490;' width='512px' height='512px'%3E%3Cg%3E%3Cpath d='M490,474.459H0L245.009,15.541L490,474.459z' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
 }
 .column a[href*="&desc%5B"],
-.icon[src*="file=down.gif"] {
+.icon-down {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' viewBox='0 0 490 490' style='enable-background:new 0 0 490 490;' width='512px' height='512px'%3E%3Cg%3E%3Cpath d='M0,15.541h490L244.991,474.459L0,15.541z' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
 }
-.icon[src*="file=cross.gif"] {
+.icon-cross {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' viewBox='0 0 174.239 174.239' style='enable-background:new 0 0 174.239 174.239;' width='512px' height='512px'%3E%3Cg%3E%3Cpath d='M146.537,1.047c-1.396-1.396-3.681-1.396-5.077,0L89.658,52.849c-1.396,1.396-3.681,1.396-5.077,0L32.78,1.047 c-1.396-1.396-3.681-1.396-5.077,0L1.047,27.702c-1.396,1.396-1.396,3.681,0,5.077l51.802,51.802c1.396,1.396,1.396,3.681,0,5.077 L1.047,141.46c-1.396,1.396-1.396,3.681,0,5.077l26.655,26.655c1.396,1.396,3.681,1.396,5.077,0l51.802-51.802 c1.396-1.396,3.681-1.396,5.077,0l51.801,51.801c1.396,1.396,3.681,1.396,5.077,0l26.655-26.655c1.396-1.396,1.396-3.681,0-5.077 l-51.801-51.801c-1.396-1.396-1.396-3.681,0-5.077l51.801-51.801c1.396-1.396,1.396-3.681,0-5.077L146.537,1.047z' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
 }
 .column a[href="#fieldset-search"] {
@@ -412,8 +411,10 @@ tbody tr:nth-child(n):hover th {
 	width: 2em;
 	height: 2em;
 	position: fixed;
+	box-shadow: none;
 }
 #lang {
+	top: 0;
 	left: 18em;
 }
 .rtl #lang {
@@ -498,7 +499,7 @@ button,
 	display: inline-block;
 	font-size: 85%;
 	text-align: center;
-	background: #4c3957;
+	background-color: #4c3957;
 	color: #fff;
 	padding: 0.5em 0.8em 0.6em;
 	margin: 0;
@@ -518,7 +519,7 @@ button:focus,
 .links a:link:focus,
 .links a:visited:focus {
 	color: #fff;
-	background: #ec5f12;
+	background-color: #ec5f12;
 	text-decoration: none;
 }
 input[type="submit"]:disabled,
@@ -692,9 +693,12 @@ input[type="file"]:disabled::file-selector-button {
 	margin-left: 0;
 }
 
-@media all and (max-width: 880px) {
+@media all and (max-width: 800px) {
 	body {
 		padding-bottom: 2em;
+	}
+	.js #menuopen {
+		left: 14px;
 	}
 	body,
 	#content,
@@ -711,7 +715,7 @@ input[type="file"]:disabled::file-selector-button {
 		width: auto;
 	}
 	#breadcrumb {
-		padding: 0 0 0 10px;
+		padding: 0 28px;
 		height: 2em;
 		line-height: 2em;
 		margin: 0 -10px;

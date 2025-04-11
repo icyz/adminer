@@ -21,6 +21,10 @@
 /** (ORIGINAL THEME cReDiTs) theme "easy on the eyes" for Adminer by p.galkaev@miraidenshi-tech.jp */
 
 
+html {
+	--bg: #110236;
+	--fg: #eee;
+}
 
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 
@@ -722,6 +726,10 @@ legend{
 /* menu
    ----------------------------------------------------------------------- */
 
+#foot{
+	height: 100%;
+}
+
 #menu{
 	height: 100%;
 	width: 300px;
@@ -735,6 +743,7 @@ legend{
 	top: 0;
 	overflow-y: overlay;
     overflow-y: auto; /* needed for firefox 2017-03-05 */
+	z-index: 10;
 }
 
 #menu p {
@@ -1066,6 +1075,10 @@ code.jush-sql ~ a:first-of-type::before{
 
 body > form{
 	/*position: relative;*/
+}
+
+.logout{
+	z-index: 5000;
 }
 
 #lang {

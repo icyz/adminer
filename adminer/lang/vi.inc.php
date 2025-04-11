@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Hệ thống',
 	'Server' => 'Máy chủ',
@@ -271,13 +271,6 @@ $translations = array(
 	'Delete' => 'Xoá',
 	'You have no privileges to update this table.' => 'Bạn không có quyền sửa bảng này.',
 
-	'E-mail' => 'Địa chỉ email',
-	'From' => 'Người gửi',
-	'Subject' => 'Chủ đề',
-	'Attachments' => 'Đính kèm',
-	'Send' => 'Gửi',
-	'%d e-mail(s) have been sent.' => '%d thư đã gửi.',
-
 	// data type descriptions
 	'Numbers' => 'Số',
 	'Date and time' => 'Ngày giờ',
@@ -327,3 +320,5 @@ $translations = array(
 	'Type has been created.' => 'Đã tạo kiểu.',
 	'Alter type' => 'Sửa kiểu dữ liệu',
 );
+
+// run `php ../../lang.php vi` to update this file

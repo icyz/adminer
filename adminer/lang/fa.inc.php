@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'سیستم',
 	'Server' => 'سرور',
@@ -277,13 +277,6 @@ $translations = array(
 	'Delete' => 'حذف',
 	'You have no privileges to update this table.' => 'شما اختیار ویرایش این جدول را ندارید.',
 
-	'E-mail' => 'پست الکترونیک',
-	'From' => 'فرستنده',
-	'Subject' => 'موضوع',
-	'Attachments' => 'پیوست ها',
-	'Send' => 'ارسال',
-	'%d e-mail(s) have been sent.' => array('%d ایمیل ارسال شد.', '%d ایمیل ارسال شد.'),
-
 	// data type descriptions
 	'Numbers' => 'اعداد',
 	'Date and time' => 'تاریخ و زمان',
@@ -333,3 +326,5 @@ $translations = array(
 	'Type has been created.' => 'نوع ایجاد شد.',
 	'Alter type' => 'ویرایش نوع',
 );
+
+// run `php ../../lang.php fa` to update this file

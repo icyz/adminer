@@ -24,7 +24,7 @@ if (!$row) {
 <p>
 <?php
 if ($TYPE != "") {
-	$types = $driver->types();
+	$types = driver()->types();
 	$enums = type_values($types[$TYPE]);
 	if ($enums) {
 		echo "<code class='jush-" . JUSH . "'>ENUM (" . h($enums) . ")</code>\n<p>";
@@ -38,6 +38,6 @@ if ($TYPE != "") {
 	textarea("as", $row["as"]);
 	echo "<p><input type='submit' value='" . lang('Save') . "'>\n";
 }
+echo input_token();
 ?>
-<input type="hidden" name="token" value="<?php echo $token; ?>">
 </form>

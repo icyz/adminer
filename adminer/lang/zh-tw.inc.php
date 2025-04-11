@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => '資料庫系統',
 	'Server' => '伺服器',
@@ -292,13 +292,6 @@ $translations = array(
 	'Delete' => '刪除',
 	'You have no privileges to update this table.' => '您沒有許可權更新這個資料表。',
 
-	'E-mail' => '電子郵件',
-	'From' => '來自',
-	'Subject' => '主旨',
-	'Attachments' => '附件',
-	'Send' => '寄出',
-	'%d e-mail(s) have been sent.' => '已寄出 %d 封郵件。',
-
 	// data type descriptions
 	'Numbers' => '數字',
 	'Date and time' => '日期時間',
@@ -348,3 +341,5 @@ $translations = array(
 	'Type has been created.' => '已建立類型。',
 	'Alter type' => '修改類型',
 );
+
+// run `php ../../lang.php zh-tw` to update this file

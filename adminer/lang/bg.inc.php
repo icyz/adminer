@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Система',
 	'Server' => 'Сървър',
@@ -256,7 +256,7 @@ $translations = array(
 	// in-place editing in select
 	'Modify' => 'Промяна',
 	'Ctrl+click on a value to modify it.' => 'Ctrl+щракване в стойността, за да я промените.',
-	'Use edit link to modify this value.' => 'Използвайте "редакция" за промяна на данните.',
+	'Use edit link to modify this value.' => 'Използвайте \'редакция\' за промяна на данните.',
 
 	// %s can contain auto-increment value
 	'Item%s has been inserted.' => 'Елементи%s бяха вмъкнати.',
@@ -278,13 +278,6 @@ $translations = array(
 	'Clone' => 'Клониране',
 	'Delete' => 'Изтриване',
 	'You have no privileges to update this table.' => 'Нямате праве за обновяване на таблицата.',
-
-	'E-mail' => 'E-mail',
-	'From' => 'От',
-	'Subject' => 'Тема',
-	'Attachments' => 'Прикачени',
-	'Send' => 'Изпращане',
-	'%d e-mail(s) have been sent.' => array('%d писмо беше изпратено.', '%d писма бяха изпратени.'),
 
 	// data type descriptions
 	'Numbers' => 'Числа',
@@ -335,3 +328,5 @@ $translations = array(
 	'Type has been created.' => 'Вида беше създаден.',
 	'Alter type' => 'Промяна на вид',
 );
+
+// run `php ../../lang.php bg` to update this file

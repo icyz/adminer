@@ -1,4 +1,8 @@
 /* CSS by Brade - www.bradezone.com */
+html {
+	--fg: #333;
+}
+
 *{margin:0;padding:0}
 body{font:13px/18px Helvetica,Arial,sans-serif;background:#fff;color:#333}
 /* generic */
@@ -24,6 +28,7 @@ code{background:#eee;padding:2px 4px;font:16px/20px Courier,monospace}
 code a:hover{background:transparent}
 table{margin:4px 0 8px;border:1px solid #ccc;font-size:inherit}
 tbody tr:hover td,tbody tr:hover th{background:#eee}
+thead { top: 40px; }
 thead tr:hover td,thead tr:hover th{background:#ddd}
 th,td{text-align:left;padding:2px 4px;vertical-align:top;font-weight:normal;border:1px dotted #ccc;border-width:0 0 0 1px;
 margin:0;background:inherit}
@@ -59,7 +64,7 @@ outline:0;background:url(//www.bradezone.com/random/adminer_logo.gif) no-repeat;
 * html #lang{padding-top:10px;height:30px}
 * html form#form{height:100%}
 #logins a,#tables a{background: none}
-.logout{color:#fff}
+.logout{color:#fff;background-color:#333;box-shadow:0 0 5px 5px #333;z-index:1}
 #logout{color:#333;text-decoration:none;border-bottom:1px dotted}
 #logout:hover{border-color:#333;background:#333;color:#fff}
 .js .column{background:#ddd}

@@ -19,13 +19,14 @@ foreach ($routine["fields"] as $i => $field) {
 if (!$error && $_POST) {
 	$call = array();
 	foreach ($routine["fields"] as $key => $field) {
+		$val = "";
 		if (in_array($key, $in)) {
 			$val = process_input($field);
 			if ($val === false) {
 				$val = "''";
 			}
 			if (isset($out[$key])) {
-				$connection->query("SET @" . idf_escape($field["field"]) . " = $val");
+				connection()->query("SET @" . idf_escape($field["field"]) . " = $val");
 			}
 		}
 		$call[] = (isset($out[$key]) ? "@" . idf_escape($field["field"]) : $val);
@@ -33,31 +34,31 @@ if (!$error && $_POST) {
 
 	$query = (isset($_GET["callf"]) ? "SELECT" : "CALL") . " " . table($PROCEDURE) . "(" . implode(", ", $call) . ")";
 	$start = microtime(true);
-	$result = $connection->multi_query($query);
-	$affected = $connection->affected_rows; // getting warnings overwrites this
-	echo $adminer->selectQuery($query, $start, !$result);
+	$result = connection()->multi_query($query);
+	$affected = connection()->affected_rows; // getting warnings overwrites this
+	echo adminer()->selectQuery($query, $start, !$result);
 
 	if (!$result) {
 		echo "<p class='error'>" . error() . "\n";
 	} else {
-		$connection2 = connect($adminer->credentials());
-		if (is_object($connection2)) {
+		$connection2 = connect();
+		if ($connection2) {
 			$connection2->select_db(DB);
 		}
 
 		do {
-			$result = $connection->store_result();
+			$result = connection()->store_result();
 			if (is_object($result)) {
-				select($result, $connection2);
+				print_select_result($result, $connection2);
 			} else {
 				echo "<p class='message'>" . lang('Routine has been called, %d row(s) affected.', $affected)
 					. " <span class='time'>" . @date("H:i:s") . "</span>\n" // @ - time zone may be not set
 				;
 			}
-		} while ($connection->next_result());
+		} while (connection()->next_result());
 
 		if ($out) {
-			select($connection->query("SELECT " . implode(", ", $out)));
+			print_select_result(connection()->query("SELECT " . implode(", ", $out)));
 		}
 	}
 }
@@ -70,14 +71,14 @@ if ($in) {
 	foreach ($in as $key) {
 		$field = $routine["fields"][$key];
 		$name = $field["field"];
-		echo "<tr><th>" . $adminer->fieldName($field);
-		$value = $_POST["fields"][$name];
+		echo "<tr><th>" . adminer()->fieldName($field);
+		$value = idx($_POST["fields"], $name);
 		if ($value != "") {
 			if ($field["type"] == "set") {
 				$value = implode(",", $value);
 			}
 		}
-		input($field, $value, (string) $_POST["function"][$name]); // param name can be empty
+		input($field, $value, idx($_POST["function"], $name, "")); // param name can be empty
 		echo "\n";
 	}
 	echo "</table>\n";
@@ -85,14 +86,18 @@ if ($in) {
 ?>
 <p>
 <input type="submit" value="<?php echo lang('Call'); ?>">
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 </form>
 
 <pre>
 <?php
-function pre_tr($s) {
+/** Format string as table row
+* @return string HTML
+*/
+function pre_tr(string $s): string {
 	return preg_replace('~^~m', '<tr>', preg_replace('~\|~', '<td>', preg_replace('~\|$~m', "", rtrim($s))));
 }
+
 $table = '(\+--[-+]+\+\n)';
 $row = '(\| .* \|\n)';
 echo preg_replace_callback(

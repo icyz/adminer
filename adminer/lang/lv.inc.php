@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Ieiet',
 	'Logout successful.' => 'Jūs veiksmīgi izgājāt no sistēmas.',
 	'Invalid credentials.' => 'Nepareizs lietotāja vārds vai parole.',
@@ -214,11 +214,6 @@ $translations = array(
 	'Binary' => 'Binārie',
 	'Lists' => 'Saraksti',
 	'Editor' => 'Redaktors',
-	'E-mail' => 'Epasts',
-	'From' => 'No',
-	'Subject' => 'Tēma',
-	'Send' => 'Sūtīt',
-	'%d e-mail(s) have been sent.' => array('Nosūtīts %d epasts.', 'Nosūtīti %d epasti.', 'Nosūtīti %d epasti.'),
 	'Webserver file %s' => 'Fails %s uz servera',
 	'File does not exist.' => 'Fails neeksistē.',
 	'%d in total' => 'Kopā %d',
@@ -243,7 +238,7 @@ $translations = array(
 	'Type has been dropped.' => 'Tips dzēsts.',
 	'Type has been created.' => 'Tips izveidots.',
 	'Ctrl+click on a value to modify it.' => 'Lai izmainītu vērtību, izmanto Ctrl + peles klikšķi.',
-	'Use edit link to modify this value.' => 'Izmainīt vērtību var tikai ar saiti "Izmainīt".',
+	'Use edit link to modify this value.' => 'Izmainīt vērtību var tikai ar saiti \'Izmainīt\'.',
 	'last' => 'pēdējā',
 	'From server' => 'No servera',
 	'System' => 'Sistēma',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Tīkls',
 	'Geometry' => 'Ģeometrija',
 	'File exists.' => 'Fails eksistē.',
-	'Attachments' => 'Pielikumi',
 	'%d query(s) executed OK.' => array('%d pieprasījums veiksmīgs.', '%d pieprasījumi veiksmīgi.', '%d pieprasījumi veiksmīgi.'),
 	'Show only errors' => 'Rādīt tikai kļūdas',
 	'Refresh' => 'Atjaunot',
@@ -302,3 +296,5 @@ $translations = array(
 	'Unknown error.' => 'Nezināma kļūda.',
 	'Database does not support password.' => 'Datubāze neatbalsta paroli.',
 );
+
+// run `php ../../lang.php lv` to update this file

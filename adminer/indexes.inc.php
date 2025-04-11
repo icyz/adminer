@@ -3,7 +3,7 @@ namespace Adminer;
 
 $TABLE = $_GET["indexes"];
 $index_types = array("PRIMARY", "UNIQUE", "INDEX");
-$table_status = table_status($TABLE, true);
+$table_status = table_status1($TABLE, true);
 if (preg_match('~MyISAM|M?aria' . (min_version(5.6, '10.0.5') ? '|InnoDB' : '') . '~i', $table_status["Engine"])) {
 	$index_types[] = "FULLTEXT";
 }
@@ -33,8 +33,8 @@ if ($_POST && !$error && !$_POST["add"] && !$_POST["drop_col"]) {
 			ksort($index["columns"]);
 			foreach ($index["columns"] as $key => $column) {
 				if ($column != "") {
-					$length = $index["lengths"][$key];
-					$desc = $index["descs"][$key];
+					$length = idx($index["lengths"], $key);
+					$desc = idx($index["descs"], $key);
 					$set[] = idf_escape($column) . ($length ? "(" . (+$length) . ")" : "") . ($desc ? " DESC" : "");
 					$columns[] = $column;
 					$lengths[] = ($length ?: null);
@@ -106,13 +106,13 @@ $show_options = ($_POST ? $_POST["options"] : get_setting("index_options"));
 <thead><tr>
 <th id="label-type"><?php echo lang('Index Type'); ?>
 <th><input type="submit" class="wayoff"><?php
-echo lang('Column') . ($lengths ? "<span class='idxopts" . ($show_options ? "" : " hidden") . "'> (" . lang('length') . ")</span>" : "");
+echo lang('Columns') . ($lengths ? "<span class='idxopts" . ($show_options ? "" : " hidden") . "'> (" . lang('length') . ")</span>" : "");
 if ($lengths || support("descidx")) {
 	echo checkbox("options", 1, $show_options, lang('Options'), "indexOptionsShow(this.checked)", "jsonly") . "\n";
 }
 ?>
 <th id="label-name"><?php echo lang('Name'); ?>
-<th><noscript><?php echo "<input type='image' class='icon' name='add[0]' src='../adminer/static/plus.gif' alt='+' title='" . lang('Add next') . "'>"; ?></noscript>
+<th><noscript><?php echo icon("plus", "add[0]", "+", lang('Add next')); ?></noscript>
 </thead>
 <?php
 if ($primary) {
@@ -139,14 +139,14 @@ foreach ($row["indexes"] as $index) {
 				"partial(" . ($i == count($index["columns"]) ? "indexesAddColumn" : "indexesChangeColumn") . ", '" . js_escape(JUSH == "sql" ? "" : $_GET["indexes"] . "_") . "')"
 			);
 			echo "<span class='idxopts" . ($show_options ? "" : " hidden") . "'>";
-			echo ($lengths ? "<input type='number' name='indexes[$j][lengths][$i]' class='size' value='" . h($index["lengths"][$key]) . "' title='" . lang('Length') . "'>" : "");
-			echo (support("descidx") ? checkbox("indexes[$j][descs][$i]", 1, $index["descs"][$key], lang('descending')) : "");
+			echo ($lengths ? "<input type='number' name='indexes[$j][lengths][$i]' class='size' value='" . h(idx($index["lengths"], $key)) . "' title='" . lang('Length') . "'>" : "");
+			echo (support("descidx") ? checkbox("indexes[$j][descs][$i]", 1, idx($index["descs"], $key), lang('descending')) : "");
 			echo "</span> </span>";
 			$i++;
 		}
 
 		echo "<td><input name='indexes[$j][name]' value='" . h($index["name"]) . "' autocapitalize='off' aria-labelledby='label-name'>\n";
-		echo "<td><input type='image' class='icon' name='drop_col[$j]' src='../adminer/static/cross.gif' alt='x' title='" . lang('Remove') . "'>" . script("qsl('input').onclick = partial(editingRemoveRow, 'indexes\$1[type]');");
+		echo "<td>" . icon("cross", "drop_col[$j]", "x", lang('Remove')) . script("qsl('button').onclick = partial(editingRemoveRow, 'indexes\$1[type]');");
 	}
 	$j++;
 }
@@ -155,5 +155,5 @@ foreach ($row["indexes"] as $index) {
 </div>
 <p>
 <input type="submit" value="<?php echo lang('Save'); ?>">
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 </form>

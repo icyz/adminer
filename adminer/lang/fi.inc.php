@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Järjestelmä',
 	'Server' => 'Palvelin',
@@ -279,13 +279,6 @@ $translations = array(
 	'Delete' => 'Poista',
 	'You have no privileges to update this table.' => 'Sinulla ei ole oikeutta päivittää tätä taulua.',
 
-	'E-mail' => 'S-posti',
-	'From' => 'Lähettäjä',
-	'Subject' => 'Aihe',
-	'Attachments' => 'Liitteet',
-	'Send' => 'Lähetä',
-	'%d e-mail(s) have been sent.' => array('% sähköpostiviestiä lähetetty.', '% sähköpostiviestiä lähetetty.'),
-
 	// data type descriptions
 	'Numbers' => 'Numerot',
 	'Date and time' => 'Päiväys ja aika',
@@ -349,3 +342,5 @@ $translations = array(
 	'Database does not support password.' => 'Tietokanta ei tue salasanaa.',
 	'Disable %s or enable %s or %s extensions.' => 'Poista käytöstä %s tai ota käyttöön laajennus %s tai %s.',
 );
+
+// run `php ../../lang.php fi` to update this file

@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Rodzaj bazy',
 	'Server' => 'Serwer',
@@ -13,6 +13,9 @@ $translations = array(
 	'Logged as: %s' => 'Zalogowany jako: %s',
 	'Logout successful.' => 'Wylogowano pomyślnie.',
 	'Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.' => 'Dziękujemy za używanie Adminera, rozważ <a href="https://www.adminer.org/pl/donation/">dotację</a>.',
+	'Loaded plugins' => 'Wczytane wtyczki',
+	'%s must <a%s>return an array</a>.' => '%s musi <a%s>zwrócić tablicę</a>.',
+	'<a%s>Configure</a> %s in %s.' => '<a%s>Skonfiguruj</a> %s w %s.',
 	'Invalid credentials.' => 'Nieprawidłowe dane logowania.',
 	'There is a space in the input password which might be the cause.' => 'W haśle wejściowym znajduje się spacja, która może być przyczyną.',
 	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer nie obsługuje dostępu do bazy danych bez hasła, <a href="https://www.adminer.org/pl/password/"%s>więcej informacji</a>.',
@@ -42,6 +45,7 @@ $translations = array(
 	'User has been created.' => 'Użytkownik został dodany.',
 	'Hashed' => 'Zahashowane',
 	'Column' => 'Kolumna',
+	'Columns' => 'Kolumny',
 	'Routine' => 'Procedura',
 	'Grant' => 'Uprawnienia',
 	'Revoke' => 'Usuń uprawnienia',
@@ -292,13 +296,6 @@ $translations = array(
 	'Delete' => 'Usuń',
 	'You have no privileges to update this table.' => 'Brak uprawnień do edycji tej tabeli.',
 
-	'E-mail' => 'E-mail',
-	'From' => 'Nadawca',
-	'Subject' => 'Temat',
-	'Attachments' => 'Załączniki',
-	'Send' => 'Wyślij',
-	'%d e-mail(s) have been sent.' => array('Wysłano %d e-mail.', 'Wysłano %d e-maile.', 'Wysłano %d e-maili.'),
-
 	// data type descriptions
 	'Numbers' => 'Numeryczne',
 	'Date and time' => 'Data i czas',
@@ -356,3 +353,5 @@ $translations = array(
 	'Check has been altered.' => 'Kontrola została zmieniona.',
 	'Check has been dropped.' => 'Kontrola została usunięta.',
 );
+
+// run `php ../../lang.php pl` to update this file

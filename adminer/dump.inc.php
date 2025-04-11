@@ -16,7 +16,7 @@ if ($_POST && !$error) {
 	$is_sql = preg_match('~sql~', $_POST["format"]);
 
 	if ($is_sql) {
-		echo "-- Adminer $VERSION " . $drivers[DRIVER] . " " . str_replace("\n", " ", $connection->server_info) . " dump\n\n";
+		echo "-- Adminer " . VERSION . " " . get_driver(DRIVER) . " " . str_replace("\n", " ", connection()->server_info) . " dump\n\n";
 		if (JUSH == "sql") {
 			echo "SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -24,8 +24,8 @@ SET foreign_key_checks = 0;
 " . ($_POST["data_style"] ? "SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 " : "") . "
 ";
-			$connection->query("SET time_zone = '+00:00'");
-			$connection->query("SET sql_mode = ''");
+			connection()->query("SET time_zone = '+00:00'");
+			connection()->query("SET sql_mode = ''");
 		}
 	}
 
@@ -39,8 +39,8 @@ SET foreign_key_checks = 0;
 	}
 
 	foreach ((array) $databases as $db) {
-		$adminer->dumpDatabase($db);
-		if ($connection->select_db($db)) {
+		adminer()->dumpDatabase($db);
+		if (connection()->select_db($db)) {
 			if ($is_sql && preg_match('~CREATE~', $style) && ($create = get_val("SHOW CREATE DATABASE " . idf_escape($db), 1))) {
 				set_utf8mb4($create);
 				if ($style == "DROP+CREATE") {
@@ -93,17 +93,18 @@ SET foreign_key_checks = 0;
 					$table = (DB == "" || in_array($name, (array) $_POST["tables"]));
 					$data = (DB == "" || in_array($name, (array) $_POST["data"]));
 					if ($table || $data) {
+						$tmp_file = null;
 						if ($ext == "tar") {
 							$tmp_file = new TmpFile;
 							ob_start(array($tmp_file, 'write'), 1e5);
 						}
 
-						$adminer->dumpTable($name, ($table ? $_POST["table_style"] : ""), (is_view($table_status) ? 2 : 0));
+						adminer()->dumpTable($name, ($table ? $_POST["table_style"] : ""), (is_view($table_status) ? 2 : 0));
 						if (is_view($table_status)) {
 							$views[] = $name;
 						} elseif ($data) {
 							$fields = fields($name);
-							$adminer->dumpData($name, $_POST["data_style"], "SELECT *" . convert_fields($fields, $fields) . " FROM " . table($name));
+							adminer()->dumpData($name, $_POST["data_style"], "SELECT *" . convert_fields($fields, $fields) . " FROM " . table($name));
 						}
 						if ($is_sql && $_POST["triggers"] && $table && ($triggers = trigger_sql($name))) {
 							echo "\nDELIMITER ;;\n$triggers\nDELIMITER ;\n";
@@ -129,7 +130,7 @@ SET foreign_key_checks = 0;
 				}
 
 				foreach ($views as $view) {
-					$adminer->dumpTable($view, $_POST["table_style"], 1);
+					adminer()->dumpTable($view, $_POST["table_style"], 1);
 				}
 
 				if ($ext == "tar") {
@@ -139,7 +140,7 @@ SET foreign_key_checks = 0;
 		}
 	}
 
-	$adminer->dumpFooter();
+	adminer()->dumpFooter();
 	exit;
 }
 
@@ -164,9 +165,9 @@ if (!isset($row["events"])) { // backwards compatibility
 	$row["triggers"] = $row["table_style"];
 }
 
-echo "<tr><th>" . lang('Output') . "<td>" . html_radios("output", $adminer->dumpOutput(), $row["output"]) . "\n";
+echo "<tr><th>" . lang('Output') . "<td>" . html_radios("output", adminer()->dumpOutput(), $row["output"]) . "\n";
 
-echo "<tr><th>" . lang('Format') . "<td>" . html_radios("format", $adminer->dumpFormat(), $row["format"]) . "\n";
+echo "<tr><th>" . lang('Format') . "<td>" . html_radios("format", adminer()->dumpFormat(), $row["format"]) . "\n";
 
 echo (JUSH == "sqlite" ? "" : "<tr><th>" . lang('Database') . "<td>" . html_select('db_style', $db_style, $row["db_style"])
 	. (support("type") ? checkbox("types", 1, $row["types"], lang('User types')) : "")
@@ -183,7 +184,7 @@ echo "<tr><th>" . lang('Data') . "<td>" . html_select('data_style', $data_style,
 ?>
 </table>
 <p><input type="submit" value="<?php echo lang('Export'); ?>">
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 
 <table>
 <?php
@@ -220,7 +221,7 @@ if (DB != "") {
 	echo "<label class='block'><input type='checkbox' id='check-databases'" . ($TABLE == "" ? " checked" : "") . ">" . lang('Database') . "</label>";
 	echo script("qs('#check-databases').onclick = partial(formCheck, /^databases\\[/);", "");
 	echo "</thead>\n";
-	$databases = $adminer->databases();
+	$databases = adminer()->databases();
 	if ($databases) {
 		foreach ($databases as $db) {
 			if (!information_schema($db)) {

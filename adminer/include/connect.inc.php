@@ -10,7 +10,7 @@ if (isset($_GET["import"])) {
 
 if (
 	!(DB != ""
-		? $connection->select_db(DB)
+		? connection()->select_db(DB)
 		: isset($_GET["sql"]) || isset($_GET["dump"]) || isset($_GET["database"]) || isset($_GET["processlist"]) || isset($_GET["privileges"]) || isset($_GET["user"]) || isset($_GET["variables"])
 			|| $_GET["script"] == "connect" || $_GET["script"] == "kill"
 	)
@@ -42,9 +42,10 @@ if (
 				echo "<a href='" . h(ME) . "$key='>$val</a>\n";
 			}
 		}
-		echo "<p>" . lang('%s version: %s through PHP extension %s', $drivers[DRIVER], "<b>" . h($connection->server_info) . "</b>", "<b>$connection->extension</b>") . "\n";
+		echo "<p>" . lang('%s version: %s through PHP extension %s', get_driver(DRIVER), "<b>" . h(connection()->server_info) . "</b>", "<b>" . connection()->extension . "</b>") . "\n";
 		echo "<p>" . lang('Logged as: %s', "<b>" . h(logged_user()) . "</b>") . "\n";
-		$databases = $adminer->databases();
+
+		$databases = adminer()->databases();
 		if ($databases) {
 			$scheme = support("scheme");
 			$collations = collations();
@@ -61,7 +62,6 @@ if (
 			;
 
 			$databases = ($_GET["dbsize"] ? count_tables($databases) : array_flip($databases));
-
 			foreach ($databases as $db => $tables) {
 				$root = h(ME) . "db=" . urlencode($db);
 				$id = h("Db-" . $db);
@@ -78,15 +78,38 @@ if (
 			echo (support("database")
 				? "<div class='footer'><div>\n"
 					. "<fieldset><legend>" . lang('Selected') . " <span id='selected'></span></legend><div>\n"
-					. "<input type='hidden' name='all' value=''>" . script("qsl('input').onclick = function () { selectCount('selected', formChecked(this, /^db/)); };") // used by trCheck()
+					. input_hidden("all") . script("qsl('input').onclick = function () { selectCount('selected', formChecked(this, /^db/)); };") // used by trCheck()
 					. "<input type='submit' name='drop' value='" . lang('Drop') . "'>" . confirm() . "\n"
 					. "</div></fieldset>\n"
 					. "</div></div>\n"
 				: ""
 			);
-			echo "<input type='hidden' name='token' value='$token'>\n";
+			echo input_token();
 			echo "</form>\n";
 			echo script("tableCheck();");
+		}
+
+		if (!empty(adminer()->plugins)) {
+			echo "<div class='plugins'>\n";
+			echo "<h3>" . lang('Loaded plugins') . "</h3>\n<ul>\n";
+			foreach (adminer()->plugins as $plugin) {
+				$description = (method_exists($plugin, 'description') ? $plugin->description() : "");
+				if (!$description) {
+					$reflection = new \ReflectionObject($plugin);
+					if (preg_match('~^/[\s*]+(.+)~', $reflection->getDocComment(), $match)) {
+						$description = $match[1];
+					}
+				}
+				$screenshot = (method_exists($plugin, 'screenshot') ? $plugin->screenshot() : "");
+				echo "<li><b>" . get_class($plugin) . "</b>"
+					. h($description ? ": $description" : "")
+					. ($screenshot ? " (<a href='" . h($screenshot) . "'" . target_blank() . ">" . lang('screenshot') . "</a>)" : "")
+					. "\n"
+				;
+			}
+			echo "</ul>\n";
+			adminer()->pluginsLinks();
+			echo "</div>\n";
 		}
 	}
 

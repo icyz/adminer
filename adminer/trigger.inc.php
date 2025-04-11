@@ -2,7 +2,7 @@
 namespace Adminer;
 
 $TABLE = $_GET["trigger"];
-$name = $_GET["name"];
+$name = "$_GET[name]";
 $trigger_options = trigger_options();
 $row = (array) trigger($name, $TABLE) + array("Trigger" => $TABLE . "_bi");
 
@@ -49,5 +49,5 @@ page_header(($name != "" ? lang('Alter trigger') . ": " . h($name) : lang('Creat
 <?php if ($name != "") { ?>
 <input type="submit" name="drop" value="<?php echo lang('Drop'); ?>"><?php echo confirm(lang('Drop %s?', $name)); ?>
 <?php } ?>
-<input type="hidden" name="token" value="<?php echo $token; ?>">
+<?php echo input_token(); ?>
 </form>

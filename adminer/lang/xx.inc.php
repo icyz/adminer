@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Xx',
 	'Server' => 'Xx',
@@ -43,6 +43,7 @@ $translations = array(
 	'User has been created.' => 'Xx.',
 	'Hashed' => 'Xx',
 	'Column' => 'Xx',
+	'Columns' => 'Xx',
 	'Routine' => 'Xx',
 	'Grant' => 'Xx',
 	'Revoke' => 'Xx',
@@ -294,13 +295,6 @@ $translations = array(
 	'Delete' => 'Xx',
 	'You have no privileges to update this table.' => 'Xx.',
 
-	'E-mail' => 'Xx',
-	'From' => 'Xx',
-	'Subject' => 'Xx',
-	'Attachments' => 'Xx',
-	'Send' => 'Xx',
-	'%d e-mail(s) have been sent.' => array('%d xx.', '%d xx.'),
-
 	// data type descriptions
 	'Numbers' => 'Xx',
 	'Date and time' => 'Xx',
@@ -357,4 +351,11 @@ $translations = array(
 	'Check has been created.' => 'Xx.',
 	'Check has been altered.' => 'Xx.',
 	'Check has been dropped.' => 'Xx.',
+
+	'Loaded plugins' => 'Xx',
+	'%s must <a%s>return an array</a>.' => '%s xx <a%s>xx</a>.',
+	'<a%s>Configure</a> %s in %s.' => '<a%s>Xx</a> %s xx %s.',
+	'screenshot' => 'xx',
 );
+
+// run `php ../../lang.php xx` to update this file

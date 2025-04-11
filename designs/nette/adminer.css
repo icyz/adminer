@@ -8,6 +8,9 @@ it is based on some parts of:
 - CSS icons by Hever - http://hev.cz
 */
 
+html {
+	--fg: #333;
+}
 
 body {
 	background: #FFF;
@@ -159,6 +162,10 @@ th, td {
 
 .js .checked th, .js .checked td {
 	background: #CEE0FC;
+}
+
+thead {
+	top: 40px;
 }
 
 thead th, thead td {
@@ -551,6 +558,8 @@ input[name="delete"]:hover, input[name="drop"]:hover {
 
 .logout {
 	color: #fff;
+	background-color: #333;
+	box-shadow: 0 0 4px 4px #333;
 	margin-top: 0.7em;
 }
 

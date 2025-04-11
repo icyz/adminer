@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	// label for database system selection (MySQL, SQLite, ...)
 	'System' => 'Sistem',
 	'Server' => 'Strežnik',
@@ -254,13 +254,6 @@ $translations = array(
 	'Clone' => 'Kloniraj',
 	'Delete' => 'Izbriši',
 
-	'E-mail' => 'E-mail',
-	'From' => 'Od',
-	'Subject' => 'Zadeva',
-	'Attachments' => 'Priponke',
-	'Send' => 'Pošlji',
-	'%d e-mail(s) have been sent.' => array('Poslan je %d e-mail.', 'Poslana sta %d e-maila.', 'Poslani so %d e-maili.', 'Poslanih je %d e-mailov.'),
-
 	// data type descriptions
 	'Numbers' => 'Števila',
 	'Date and time' => 'Datum in čas',
@@ -306,3 +299,5 @@ $translations = array(
 	'Type has been created.' => 'Tip je ustvarjen.',
 	'Alter type' => 'Spremeni tip',
 );
+
+// run `php ../../lang.php sl` to update this file

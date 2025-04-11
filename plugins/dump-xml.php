@@ -6,7 +6,7 @@
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
-class AdminerDumpXml {
+class AdminerDumpXml extends Adminer\Plugin {
 	protected $database = false;
 
 	function dumpFormat() {
@@ -25,8 +25,7 @@ class AdminerDumpXml {
 				$this->database = true;
 				echo "<database name='" . Adminer\h(Adminer\DB) . "'>\n";
 			}
-			$connection = Adminer\connection();
-			$result = $connection->query($query, 1);
+			$result = Adminer\connection()->query($query, 1);
 			if ($result) {
 				while ($row = $result->fetch_assoc()) {
 					echo "\t<table name='" . Adminer\h($table) . "'>\n";
@@ -52,4 +51,12 @@ class AdminerDumpXml {
 			echo "</database>\n";
 		}
 	}
+
+	protected $translations = array(
+		'cs' => array('' => 'Export do formátu XML ve struktuře <database name=""><table name=""><column name="">value'),
+		'de' => array('' => 'Export im XML-Format in der Struktur <database name="><table name=""><column name="">value'),
+		'pl' => array('' => 'Zrzut do formatu XML w strukturze <database name=""><table name=""><column name="">value'),
+		'ro' => array('' => 'Dump în format XML în structura <database name=""><table name=""><column name="">value'),
+		'ja' => array('' => '構造化 XML 形式でエクスポート <database name=""><table name=""><column name="">value'),
+	);
 }

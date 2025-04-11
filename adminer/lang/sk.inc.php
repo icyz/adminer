@@ -1,7 +1,7 @@
 <?php
 namespace Adminer;
 
-$translations = array(
+Lang::$translations = array(
 	'Login' => 'Prihlásiť sa',
 	'Logout successful.' => 'Odhlásenie prebehlo v poriadku.',
 	'Invalid credentials.' => 'Neplatné prihlasovacie údaje.',
@@ -205,11 +205,6 @@ $translations = array(
 	'History' => 'História',
 	'Variables' => 'Premenné',
 	'Source and target columns must have the same data type, there must be an index on the target columns and referenced data must exist.' => 'Zdrojové a cieľové stĺpce musia mať rovnaký datový typ, nad cieľovými stĺpcami musí byť definovaný index a odkazované dáta musia existovať.',
-	'E-mail' => 'E-mail',
-	'From' => 'Odosielateľ',
-	'Subject' => 'Predmet',
-	'Send' => 'Odoslať',
-	'%d e-mail(s) have been sent.' => array('Bol odoslaný %d e-mail.', 'Boli odoslané %d e-maily.', 'Bolo odoslaných %d e-mailov.'),
 	'Run file' => 'Spustiť súbor',
 	'Numbers' => 'Čísla',
 	'Date and time' => 'Dátum a čas',
@@ -253,7 +248,6 @@ $translations = array(
 	'Network' => 'Sieť',
 	'Geometry' => 'Geometria',
 	'File exists.' => 'Súbor existuje.',
-	'Attachments' => 'Prílohy',
 	'%d query(s) executed OK.' => array('Bol vykonaný %d dotaz.', 'Boli vykonané %d dotazy.', 'Bolo vykonaných %d dotazov.'),
 	'Show only errors' => 'Zobraziť iba chyby',
 	'Refresh' => 'Obnoviť',
@@ -281,7 +275,7 @@ $translations = array(
 	'Warnings' => 'Varovania',
 	'%d / ' => '%d / ',
 	'Limit rows' => 'Limit riadkov',
-	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer nepodporuje prístup k databáze bez hesla, <a href="https://www.adminer.org/cs/password/"%s>viac informácií</a>.',
+	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer nepodporuje prístup k databáze bez hesla, <a href="https://www.adminer.org/sk/password/"%s>viac informácií</a>.',
 	'Default value' => 'Predvolená hodnota',
 	'Full table scan' => 'Prechod celej tabuľky',
 	'Too many unsuccessful logins, try again in %d minute(s).' => array('Príliš veľa pokusov o prihlásenie, skúste to znova za %d minutu.', 'Príliš veľa pokusov o prihlásenie, skúste to znova za %d minuty.', 'Príliš veľa pokusov o prihlásenie, skúste to znova za %d minút.'),
@@ -309,3 +303,5 @@ $translations = array(
 	'Check has been altered.' => 'Kontrola bola zmenená.',
 	'Check has been dropped.' => 'Kontrola bola odstránená.',
 );
+
+// run `php ../../lang.php sk` to update this file
