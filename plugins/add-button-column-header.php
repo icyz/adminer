@@ -9,7 +9,7 @@ class AdminerAddButtonColumnHeader extends Adminer\Plugin {
     private $tableName;
     private $buttons;
 
-    function __construct($buttons = [self::DISTINCT, self::DISTINCT]) {
+    function __construct($buttons = [self::DISTINCT]) {
         $this->buttons = $buttons;
     }
 
