@@ -1,16 +1,19 @@
 <?php
 
 /**
- * Favorite Query using localstorage or filesystem
+ * Save favorite queries in local storage or in the filesystem
  * @author Andrea Mariani, fasys.it
  */
-class AdminerFavoriteQuery
-{
+class AdminerFavoriteQuery extends Adminer\Plugin {
     const STORAGE_NAME = 'adminer_favorite_query';
 
-    public function head(){
-        $persistent = class_exists("AdminerFavoriteQueryFileSystem");
+    private $filesystem;
 
+    function __construct($filesystem = false) {
+        $this->filesystem = $filesystem;
+    }
+
+    public function head(){
         $sql = filter_input(INPUT_GET, 'sql');
         if (!isset($sql)) {
             return;
@@ -26,7 +29,7 @@ class AdminerFavoriteQuery
             $datetime = $now->format("y-m-d H:i:s");
             $query_hash = sha1($_POST['query']);
 
-            if($persistent){
+            if($this->filesystem){
                 //save in a file on the server
                 $storage = file_get_contents(self::STORAGE_NAME);
                 $storage = json_decode((string)$storage, true);
@@ -55,7 +58,7 @@ class AdminerFavoriteQuery
             }
         }
         elseif($remove_favorite){
-            if($persistent) {
+            if($this->filesystem) {
                 //filesystem
                 $storage = file_get_contents(self::STORAGE_NAME);
                 $storage = json_decode((string)$storage, true);
@@ -94,24 +97,23 @@ class AdminerFavoriteQuery
                 let storage;
 
                 <?php
-                if($persistent){
-                    $storage = file_get_contents(self::STORAGE_NAME);
+                if($this->filesystem){
+                    $storage = "";
+                    if(file_exists(self::STORAGE_NAME)) {
+                        $storage = file_get_contents(self::STORAGE_NAME);
+                    }
                     echo "storage = `{$storage}`;";
                 }
                 else{ ?>
                     storage = localStorage.getItem('<?php echo self::STORAGE_NAME ?>');
                 <?php } ?>
 
-                console.log(storage);
-
                 if(!storage){
                     storage = "{}";
                 }
-                console.log(storage);
 
                 //order by descending
                 storage = JSON.parse(storage);
-                console.log(storage);
                 const reversedStorage = Object.keys(storage)
                     .reverse()
                     .reduce((acc, key) => {

@@ -4,8 +4,7 @@
  * Allow Disable foreign keys
  * @author Andrea Mariani, fasys.it
  */
-class AdminerFkDisable
-{
+class AdminerFkDisable extends Adminer\Plugin {
     private function deleteAllBetween($beginning, $end, $string) {
         $end = (string)$end;
         $beginningPos = strpos($string, $beginning);

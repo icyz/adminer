@@ -4,8 +4,7 @@
  * Suggests fields and tablenames
  * @author Andrea Mariani, fasys.it
  */
-class AdminerSuggestTableField
-{
+class AdminerSuggestTableField extends Adminer\Plugin {
 	public function head(){
 		if (!isset($_GET['sql'])) {
 			return;
