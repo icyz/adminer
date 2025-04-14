@@ -41,7 +41,7 @@ class AdminerAddButtonColumnHeader extends Adminer\Plugin {
                     foreach($this->buttons as $button) {
                         switch($button){
                             case self::DISTINCT:
-                                echo "el.insertAdjacentHTML(\"beforeend\", \"<div class='AdminerAddButtonColumnHeader'><a href='?username=". $_GET['username'] ."&db=" . $_GET['db'] ."&sql=SELECT DISTINCT `\"+ fieldname +\"` FROM `". $this->tableName ."`;'>". Adminer\lang("Distinct") ."</a></div>\");";
+                                echo "el.insertAdjacentHTML(\"beforeend\", \"<div class='AdminerAddButtonColumnHeader'><a href='?username=". $_GET['username'] ."&db=" . $_GET['db'] ."&sql=SELECT DISTINCT `\"+ fieldname +\"` FROM `". $this->tableName ."`;'>Distinct</a></div>\");";
                                 break;
 
                             //TODO: waiting for other ideas...

@@ -7,7 +7,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
  */
 class AdminerDisableTables extends Adminer\Plugin {
-
     private $disabledTables;
 
     function __construct(array $disabledTables = []) {
@@ -20,7 +19,7 @@ class AdminerDisableTables extends Adminer\Plugin {
 
         if($select) {
             if (in_array($select, $this->disabledTables) === true) {
-                die(Adminer\h('Access Denied.'));
+                die($this->lang('Access Denied') . '.');
             }
         }
 
@@ -30,5 +29,11 @@ class AdminerDisableTables extends Adminer\Plugin {
 
         return Adminer\h($tableStatus['Name']);
     }
+
+    protected $translations = [
+        'it' => [
+            'Access Denied' => 'Accesso Negato',
+        ]
+    ];
 
 }

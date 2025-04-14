@@ -98,11 +98,11 @@ class AdminerSuggestTableField extends Adminer\Plugin {
 
             let suggests_mysql = "";
 
-            suggests_mysql += "<dt><?php echo Adminer\lang('Tables') ?></dt>"
+            suggests_mysql += "<dt><?php echo $this->lang('Tables') ?></dt>"
             for(k in suggests['___tables___']){
                 suggests_mysql += "<dd><a href='#' data-table='1'>"+ suggests['___tables___'][k] +"</a></dd>"
             }
-            suggests_mysql += "<dt><?php echo Adminer\lang('SQL command') ?></dt>"
+            suggests_mysql += "<dt><?php echo $this->lang('SQL command') ?></dt>"
             for(k in suggests['___mysql___']){
                 suggests_mysql += "<dd><a href='#' data-nobt='1'>"+ suggests['___mysql___'][k] +"</a></dd>"
             }
@@ -110,9 +110,9 @@ class AdminerSuggestTableField extends Adminer\Plugin {
             const posLeft = (sqlarea.offsetWidth + 3);
             form.insertAdjacentHTML('afterbegin',
                 '<div id="suggest_tablefields_container" style="height:'+ sqlarea.offsetHeight +'px;top:0;left:'+ posLeft +'px">'+
-                '<span class="noselect" id="suggest_tablefields_drag">drag</span>|'+
-                '<span class="noselect" id="suggest_tablefields_stick" data-pos-left="'+ posLeft +'px">stick</span>&nbsp;'+
-                '<input autocomplete="off" id="suggest_search" type="text" placeholder="<?php echo Adminer\lang('Search') ?>..."/><dl id="suggest_tablefields" class="noselect"></dl></div>')
+                '<span class="noselect" id="suggest_tablefields_drag"><?php echo $this->lang("drag") ?></span>|'+
+                '<span class="noselect" id="suggest_tablefields_stick" data-pos-left="'+ posLeft +'px"><?php echo $this->lang("stick") ?></span>&nbsp;'+
+                '<input autocomplete="off" id="suggest_search" type="text" placeholder="<?php echo $this->lang('Search') ?>..."/><dl id="suggest_tablefields" class="noselect"></dl></div>')
             compile(suggests_mysql)
 
 
@@ -234,4 +234,14 @@ class AdminerSuggestTableField extends Adminer\Plugin {
     </script>
     <?php
 	}
+
+    /*
+    protected $translations = [
+        'it' => [
+            'drag' => 'drag',
+            'stick' => 'stick',
+        ]
+    ];
+    */
+
 }

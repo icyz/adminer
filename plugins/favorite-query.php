@@ -91,7 +91,7 @@ class AdminerFavoriteQuery extends Adminer\Plugin {
 
             domReady(() => {
                 const formp1 = document.querySelectorAll('#form p')[1];
-                formp1.insertAdjacentHTML('beforeend', '<label style="margin-left:3px;"><input type="checkbox" name="add_favorite" value="1" />Add to Favorites</label>');
+                formp1.insertAdjacentHTML('beforeend', '<label style="margin-left:3px;"><input type="checkbox" name="add_favorite" value="1" /><?php echo $this->lang("Add to Favorites") ?></label>');
 
                 let favorite_queries = "";
                 let storage;
@@ -124,8 +124,8 @@ class AdminerFavoriteQuery extends Adminer\Plugin {
                 for (let query_hash in reversedStorage) {
                     favorite_queries += `
                     <div>
-                        <a title="Use Favorite" href="?username=<?php echo $_GET['username'] ?>&db=<?php echo $_GET['db'] ?>&sql=${storage[query_hash]['query']}"><img style="padding:1px; width: 15px; " src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNS4xIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIzIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMjI2LjUgMTY4LjhMMjg3LjkgNDIuM2w2MS40IDEyNi41YzQuNiA5LjUgMTMuNiAxNi4xIDI0LjEgMTcuN2wxMzcuNCAyMC4zLTk5LjggOTguOGMtNy40IDcuMy0xMC44IDE3LjgtOSAyOC4xbDIzLjUgMTM5LjVMMzAzIDQwNy43Yy05LjQtNS0yMC43LTUtMzAuMiAwTDE1MC4yIDQ3My4ybDIzLjUtMTM5LjVjMS43LTEwLjMtMS42LTIwLjctOS0yOC4xTDY1IDIwNi44bDEzNy40LTIwLjNjMTAuNS0xLjUgMTkuNS04LjIgMjQuMS0xNy43ek00MjQuOSA1MDkuMWM4LjEgNC4zIDE3LjkgMy43IDI1LjMtMS43czExLjItMTQuNSA5LjctMjMuNUw0MzMuNiAzMjguNCA1NDQuOCAyMTguMmM2LjUtNi40IDguNy0xNS45IDUuOS0yNC41cy0xMC4zLTE0LjktMTkuMy0xNi4zTDM3OC4xIDE1NC44IDMwOS41IDEzLjVDMzA1LjUgNS4yIDI5Ny4xIDAgMjg3LjkgMHMtMTcuNiA1LjItMjEuNiAxMy41TDE5Ny43IDE1NC44IDQ0LjUgMTc3LjVjLTkgMS4zLTE2LjUgNy42LTE5LjMgMTYuM3MtLjUgMTguMSA1LjkgMjQuNUwxNDIuMiAzMjguNCAxMTYgNDgzLjljLTEuNSA5IDIuMiAxOC4xIDkuNyAyMy41czE3LjMgNiAyNS4zIDEuN2wxMzctNzMuMiAxMzcgNzMuMnoiLz48L3N2Zz4=" /></a>
-                        <a title="Delete Favorite" class="remove_favorite" href="?username=<?php echo $_GET['username'] ?>&db=<?php echo $_GET['db'] ?>&sql=&remove_favorite=${query_hash}"><img style="padding:1px; width: 15px; " src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHSSURBVHjapFM5bsJQEB2zSIDFJrHYpEtyAyoKJAp6CrqIkBPkNDlBAKXjBEgUpKOBCyQNijFiEZvZl8z7wsjESYpkpNFfPO/Nmz9j6Xg80n/M9fWi3W7fMOnd4XAo8qogAbvO5xKvL6lU6s0aL1kVMDjP5ye/36+Gw2FyOp3EQFqtVtTr9WixWHT5/JhOp6s2ghP4ORaLyaFQiGazGa3Xa0HgdrvJ6/WSpmk0Go0MjnvIZDLVM0Gr1brm/WskEkkA3O/3abvdQjq5XC6xgoiVka7rNB6PNT6ns9nsu+OkpODxeBLBYJAGgwHt9/uzQ8Vms6Hdbie+KYqC+ASTFrARBMx2HwgEaDKZiHqn0yktl0uxtzrMMAyKx+MCc+4Cs13hwQCC1GQy+W3Lms2mUIUygbEqEBLNun8z8zswVgUfLO0WD4Z6kekn8/l8okNM8GFVUMYDoVWQ6HA4bEAzoyzL1O12kbRsJajwhYZhiUajJEnShWSAQaqqKnU6HahEGysXg9RoNPJ8+cwZZLSKp47m8/k5Kxzg4XBocNxDLper2ka5Xq+LUeatilahJLN1mEJ+ZDHKJthGAKvVauJnYi9ysHIqQee1xOsLg3/+mf5inwIMAJMhb74NwG5wAAAAAElFTkSuQmCC" /></a>
+                        <a title="<?php echo $this->lang("Use Favorite") ?>" href="?username=<?php echo $_GET['username'] ?>&db=<?php echo $_GET['db'] ?>&sql=${storage[query_hash]['query']}"><img style="padding:1px; width: 15px; " src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNS4xIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIzIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMjI2LjUgMTY4LjhMMjg3LjkgNDIuM2w2MS40IDEyNi41YzQuNiA5LjUgMTMuNiAxNi4xIDI0LjEgMTcuN2wxMzcuNCAyMC4zLTk5LjggOTguOGMtNy40IDcuMy0xMC44IDE3LjgtOSAyOC4xbDIzLjUgMTM5LjVMMzAzIDQwNy43Yy05LjQtNS0yMC43LTUtMzAuMiAwTDE1MC4yIDQ3My4ybDIzLjUtMTM5LjVjMS43LTEwLjMtMS42LTIwLjctOS0yOC4xTDY1IDIwNi44bDEzNy40LTIwLjNjMTAuNS0xLjUgMTkuNS04LjIgMjQuMS0xNy43ek00MjQuOSA1MDkuMWM4LjEgNC4zIDE3LjkgMy43IDI1LjMtMS43czExLjItMTQuNSA5LjctMjMuNUw0MzMuNiAzMjguNCA1NDQuOCAyMTguMmM2LjUtNi40IDguNy0xNS45IDUuOS0yNC41cy0xMC4zLTE0LjktMTkuMy0xNi4zTDM3OC4xIDE1NC44IDMwOS41IDEzLjVDMzA1LjUgNS4yIDI5Ny4xIDAgMjg3LjkgMHMtMTcuNiA1LjItMjEuNiAxMy41TDE5Ny43IDE1NC44IDQ0LjUgMTc3LjVjLTkgMS4zLTE2LjUgNy42LTE5LjMgMTYuM3MtLjUgMTguMSA1LjkgMjQuNUwxNDIuMiAzMjguNCAxMTYgNDgzLjljLTEuNSA5IDIuMiAxOC4xIDkuNyAyMy41czE3LjMgNiAyNS4zIDEuN2wxMzctNzMuMiAxMzcgNzMuMnoiLz48L3N2Zz4=" /></a>
+                        <a title="<?php echo $this->lang("Delete Favorite") ?>" class="remove_favorite" href="?username=<?php echo $_GET['username'] ?>&db=<?php echo $_GET['db'] ?>&sql=&remove_favorite=${query_hash}"><img style="padding:1px; width: 15px; " src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHSSURBVHjapFM5bsJQEB2zSIDFJrHYpEtyAyoKJAp6CrqIkBPkNDlBAKXjBEgUpKOBCyQNijFiEZvZl8z7wsjESYpkpNFfPO/Nmz9j6Xg80n/M9fWi3W7fMOnd4XAo8qogAbvO5xKvL6lU6s0aL1kVMDjP5ye/36+Gw2FyOp3EQFqtVtTr9WixWHT5/JhOp6s2ghP4ORaLyaFQiGazGa3Xa0HgdrvJ6/WSpmk0Go0MjnvIZDLVM0Gr1brm/WskEkkA3O/3abvdQjq5XC6xgoiVka7rNB6PNT6ns9nsu+OkpODxeBLBYJAGgwHt9/uzQ8Vms6Hdbie+KYqC+ASTFrARBMx2HwgEaDKZiHqn0yktl0uxtzrMMAyKx+MCc+4Cs13hwQCC1GQy+W3Lms2mUIUygbEqEBLNun8z8zswVgUfLO0WD4Z6kekn8/l8okNM8GFVUMYDoVWQ6HA4bEAzoyzL1O12kbRsJajwhYZhiUajJEnShWSAQaqqKnU6HahEGysXg9RoNPJ8+cwZZLSKp47m8/k5Kxzg4XBocNxDLper2ka5Xq+LUeatilahJLN1mEJ+ZDHKJthGAKvVauJnYi9ysHIqQee1xOsLg3/+mf5inwIMAJMhb74NwG5wAAAAAElFTkSuQmCC" /></a>
                         <span class="time">${storage[query_hash]['datetime']}</span>
                         <code style="display: inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:600px; vertical-align:middle;">`+ jush.highlight("sql", decodeURIComponent(storage[query_hash]['query'])) +`</code>
                     </div>`;
@@ -133,7 +133,7 @@ class AdminerFavoriteQuery extends Adminer\Plugin {
 
                 formp1.insertAdjacentHTML('afterend', `
                     <div>
-                    <fieldset><legend><a href="#favorite-queries">Favorites</a></legend>
+                    <fieldset><legend><a href="#favorite-queries"><?php echo $this->lang("Favorites") ?></a></legend>
                     <div id="favorite-queries">${favorite_queries}</div>
                     </fieldset>
                     </div>`);
@@ -142,7 +142,7 @@ class AdminerFavoriteQuery extends Adminer\Plugin {
 
                 document.querySelectorAll('.remove_favorite').forEach(link => {
                     link.addEventListener('click', function(event) {
-                        const userConfirmed = confirm("Are you sure you want to delete this favorite query?");
+                        const userConfirmed = confirm("<?php echo $this->lang("Are you sure you want to delete this favorite query?") ?>");
                         if (!userConfirmed) {
                             event.preventDefault();
                         }
@@ -153,4 +153,14 @@ class AdminerFavoriteQuery extends Adminer\Plugin {
         </script>
         <?php
     }
+
+    protected $translations = [
+        'it' => [
+            'Add to Favorites' => 'Aggiungi query ai preferiti',
+            'Use Favorite' => 'Usa query preferita',
+            'Delete Favorite' => 'Elimina query preferita',
+            'Favorites' => 'Preferiti',
+            'Are you sure you want to delete this favorite query preferita?' => 'Sei sicuro di eliminare questa query?'
+        ]
+    ];
 }
